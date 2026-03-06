@@ -1,0 +1,115 @@
+<!doctype html>
+<!-- File guide: Ranking page showing podium, leaderboard entries, and simple time filter tabs. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CrossQuest | Leaderboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="leaderboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <button class="mobile-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+    <nav class="sidebar">
+      <div class="sidebar-logo"><div class="logo-icon"></div><span>CrossQuest</span></div>
+            <ul class="sidebar-nav">
+        <li class="nav-section">MAIN</li>
+        <li><a href="home.html"  data-tooltip="Home"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="play.html"  data-tooltip="Crossword"><i class="fa-solid fa-puzzle-piece"></i> Crossword</a></li>
+        
+        <li class="nav-section">STUDIO</li>
+        <li><a href="create.html"  data-tooltip="Create"><i class="fa-solid fa-circle-plus"></i> Create</a></li>
+        
+        <li class="nav-section">COMMUNITY</li>
+        <li><a href="leaderboard.html" class="active" data-tooltip="Leaderboard"><i class="fa-solid fa-trophy"></i> Leaderboard</a></li>
+        <li><a href="forum.html"  data-tooltip="Forum"><i class="fa-regular fa-comments"></i> Forum</a></li>
+        
+        <li class="nav-section">ACCOUNT</li>
+        <li><a href="premium.html"  data-tooltip="Membership"><i class="fa-solid fa-crown"></i> Membership</a></li>
+      </ul>
+
+      <div class="user-profile animate-fade-in delay-500">
+        <div class="avatar user-avatar">A</div>
+        <div class="user-info">
+          <span class="username">ARENO</span>
+          <span class="user-edit">Edit Profile</span>
+        </div>
+      </div>
+    </nav>
+
+    <main class="main-area">
+      <div class="main-content">
+
+        <!-- Header -->
+        <div class="lb-header animate-slide-up">
+          <h1 class="page-title"><i class="fa-solid fa-trophy"></i> Leaderboard</h1>
+          <p style="color: var(--text-secondary); text-align: center;">Compete with solvers worldwide</p>
+        </div>
+
+        <!-- Time Filter Tabs -->
+        <div class="lb-tabs animate-slide-up delay-100">
+          <button class="lb-tab active" data-filter="all-time">All Time</button>
+          <button class="lb-tab" data-filter="weekly">This Week</button>
+          <button class="lb-tab">Today</button>
+        </div>
+
+        <!-- Top 3 Podium -->
+        <div class="podium animate-slide-up delay-200">
+          <!-- 2nd Place -->
+          <div class="podium-item podium-2nd">
+            <div class="podium-avatar" style="background: linear-gradient(135deg, #94A3B8, #CBD5E1);">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="podium-medal silver"><i class="fa-solid fa-medal"></i></div>
+            <h4 class="podium-name" id="p2-name">LexiconLover</h4>
+            <span class="podium-score" id="p2-score">9,550</span>
+            <div class="podium-bar podium-bar-2"></div>
+          </div>
+
+          <!-- 1st Place -->
+          <div class="podium-item podium-1st">
+            <div class="podium-avatar" style="background: linear-gradient(135deg, #FBBF24, #F59E0B);">
+              <i class="fa-solid fa-crown"></i>
+            </div>
+            <div class="podium-medal gold"><i class="fa-solid fa-trophy"></i></div>
+            <h4 class="podium-name" id="p1-name">WordMaster99</h4>
+            <span class="podium-score" id="p1-score">9,800</span>
+            <div class="podium-bar podium-bar-1"></div>
+          </div>
+
+          <!-- 3rd Place -->
+          <div class="podium-item podium-3rd">
+            <div class="podium-avatar" style="background: linear-gradient(135deg, #D97706, #B45309);">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="podium-medal bronze"><i class="fa-solid fa-medal"></i></div>
+            <h4 class="podium-name" id="p3-name">PuzzlePro</h4>
+            <span class="podium-score" id="p3-score">9,200</span>
+            <div class="podium-bar podium-bar-3"></div>
+          </div>
+        </div>
+
+        <!-- Remaining Ranks -->
+        <div class="lb-list animate-slide-up delay-300">
+          <div class="lb-row" id="lb-list-container">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Load More Button -->
+        <div class="lb-footer animate-slide-up delay-400">
+          <button id="btn-load-more" class="btn btn-outline" style="margin: 24px auto; display: none;">Load More Solvers</button>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

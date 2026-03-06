@@ -1,0 +1,66 @@
+<!doctype html>
+<!-- File guide: Landing entry page with animated background and CTA to open the app dashboard. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CrossQuest — Puzzle Your Mind</title>
+  <meta name="description" content="CrossQuest: The ultimate crossword puzzle experience." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="landing.css" />
+</head>
+<body>
+
+  <!-- Crossword Tile Background -->
+  <div id="tileLayer"></div>
+
+  <!-- Sparkle Particles -->
+  <canvas id="sparkleCanvas"></canvas>
+
+  <!-- Radial Glow for Readability -->
+  <div class="center-glow"></div>
+
+  <!-- Content -->
+  <div class="landing-overlay">
+    <div class="landing-inner">
+
+      <div class="landing-logo">
+        <div class="logo-icon"></div>
+        <div class="logo-text"><span class="green">Cross</span>Quest</div>
+      </div>
+
+      <p class="landing-subtitle">The Ultimate Crossword Experience</p>
+
+      <p class="landing-tagline">
+        Solve crosswords, unscramble words, and <strong>challenge your mind</strong> — one puzzle at a time.
+      </p>
+
+      <div class="landing-stats">
+        <div class="stat-pill green"><i class="fa-solid fa-puzzle-piece"></i> <span class="sn">500+</span> Puzzles</div>
+        <div class="stat-pill blue"><i class="fa-solid fa-gamepad"></i> <span class="sn">3</span> Modes</div>
+        <div class="stat-pill orange"><i class="fa-solid fa-fire"></i> <span class="sn">∞</span> Fun</div>
+      </div>
+
+      <a href="home.html" class="enter-btn" id="enterBtn">
+        <i class="fa-solid fa-play play-i"></i> Start Playing <i class="fa-solid fa-arrow-right arr"></i>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Scroll Indicator -->
+  <div class="scroll-indicator">
+    <span class="scroll-text">Scroll to enter</span>
+    <div class="scroll-mouse"></div>
+    <div class="scroll-arrows">
+      <i class="fa-solid fa-chevron-down"></i>
+      <i class="fa-solid fa-chevron-down"></i>
+    </div>
+  </div>
+
+</body>
+</html>
+<script src="script.js"></script>

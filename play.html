@@ -1,0 +1,176 @@
+<!doctype html>
+<!-- File guide: Puzzle library page where users browse and start available crossword topics. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CrossQuest | Play</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="play.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <button class="mobile-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+    <nav class="sidebar">
+      <div class="sidebar-logo"><div class="logo-icon"></div><span>CrossQuest</span></div>
+            <ul class="sidebar-nav">
+        <li class="nav-section">MAIN</li>
+        <li><a href="home.html"  data-tooltip="Home"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="play.html" class="active" data-tooltip="Crossword"><i class="fa-solid fa-puzzle-piece"></i> Crossword</a></li>
+        
+        <li class="nav-section">STUDIO</li>
+        <li><a href="create.html"  data-tooltip="Create"><i class="fa-solid fa-circle-plus"></i> Create</a></li>
+        
+        <li class="nav-section">COMMUNITY</li>
+        <li><a href="leaderboard.html"  data-tooltip="Leaderboard"><i class="fa-solid fa-trophy"></i> Leaderboard</a></li>
+        <li><a href="forum.html"  data-tooltip="Forum"><i class="fa-regular fa-comments"></i> Forum</a></li>
+        
+        <li class="nav-section">ACCOUNT</li>
+        <li><a href="premium.html"  data-tooltip="Membership"><i class="fa-solid fa-crown"></i> Membership</a></li>
+      </ul>
+
+      <div class="user-profile animate-fade-in delay-500">
+        <div class="avatar user-avatar">A</div>
+        <div class="user-info">
+          <span class="username">ARENO</span>
+          <span class="user-edit">Edit Profile</span>
+        </div>
+      </div>
+    </nav>
+
+    <main class="main-area">
+      <div class="main-content full">
+        <div class="library-header-dark">
+          <h1 class="page-title">Infinite <span>Challenges</span></h1>
+          <div class="search-box dark-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Search the library...">
+          </div>
+        </div>
+
+        <div class="challenges-grid">
+          <!-- Main Free Challenges -->
+          <div class="challenge-card" data-play-id="tech">
+            <div class="size-badge blue">8x</div>
+            <div class="card-info">
+              <h3 class="c-title">Tech & Code</h3>
+              <p class="c-author">Variables & logic puzzles</p>
+              <div class="c-stats">
+                <span><i class="fa-regular fa-clock"></i> ~5m</span>
+                <span><i class="fa-solid fa-trophy"></i> 50 solved</span>
+              </div>
+            </div>
+            <button class="c-btn"><i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+
+          <!-- PRO challenge style matching image -->
+          <div class="challenge-card card-pro" data-play-id="space">
+            <div class="size-badge">10x</div>
+            <div class="card-info">
+              <h3 class="c-title">Space Exploration <span class="pro-tag"><i class="fa-solid fa-crown"></i> PRO</span></h3>
+              <p class="c-author">Stars & galaxies</p>
+              <p class="pro-requirement">Premium Subscription Required</p>
+              <div class="c-stats">
+                <span><i class="fa-regular fa-clock"></i> ~4m</span>
+                <span><i class="fa-solid fa-trophy"></i> 12 solved</span>
+              </div>
+            </div>
+            <button class="c-btn btn-locked"><i class="fa-solid fa-lock"></i></button>
+          </div>
+
+          <div class="challenge-card card-orange" data-play-id="f1">
+            <div class="size-badge blue">10x</div>
+            <div class="card-info">
+              <h3 class="c-title">Formula 1 Racing</h3>
+              <p class="c-author">Tracks, cars, & speed</p>
+              <div class="c-stats">
+                <span><i class="fa-regular fa-clock"></i> ~5m</span>
+                <span><i class="fa-solid fa-trophy"></i> 35 solved</span>
+              </div>
+            </div>
+            <button class="c-btn"><i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+
+          <div class="challenge-card card-pro" data-play-id="culinary">
+            <div class="size-badge blue">10x</div>
+            <div class="card-info">
+              <h3 class="c-title">Culinary Classics <span class="pro-tag"><i class="fa-solid fa-crown"></i> PRO</span></h3>
+              <p class="c-author">Recipes & ingredients</p>
+              <p class="pro-requirement">Premium Subscription Required</p>
+              <div class="c-stats">
+                <span><i class="fa-regular fa-clock"></i> ~5m</span>
+                <span><i class="fa-solid fa-trophy"></i> 62 solved</span>
+              </div>
+            </div>
+            <button class="c-btn btn-locked"><i class="fa-solid fa-lock"></i></button>
+          </div>
+
+          <div class="challenge-card card-pro" data-play-id="cinema">
+            <div class="size-badge blue">9x</div>
+            <div class="card-info">
+              <h3 class="c-title">Cinema Magic <span class="pro-tag"><i class="fa-solid fa-crown"></i> PRO</span></h3>
+              <p class="c-author">Hollywood blockbusters</p>
+              <p class="pro-requirement">Premium Subscription Required</p>
+              <div class="c-stats">
+                <span><i class="fa-regular fa-clock"></i> ~4m</span>
+                <span><i class="fa-solid fa-trophy"></i> 41 solved</span>
+              </div>
+            </div>
+            <button class="c-btn btn-locked"><i class="fa-solid fa-lock"></i></button>
+          </div>
+
+          <div class="challenge-card card-blue" data-play-id="safari">
+            <div class="size-badge blue">8x</div>
+            <div class="card-info">
+              <h3 class="c-title">Wild Safari</h3>
+              <p class="c-author">Animals & nature</p>
+              <div class="c-stats">
+                <span><i class="fa-regular fa-clock"></i> ~2m</span>
+                <span><i class="fa-solid fa-trophy"></i> 105 solved</span>
+              </div>
+            </div>
+            <button class="c-btn"><i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+        </div>
+
+        <section id="creator-studio-section" class="creator-studio">
+          <h2>Creator <span>Studio</span></h2>
+          <p class="cs-subtitle">Your custom builds</p>
+          <div id="custom-puzzle-list" class="cs-grid">
+            <div class="creator-card create-new" id="btn-create-new">
+               <div class="cc-icon">+</div>
+               <div class="cc-info">
+                 <h4>Create New</h4>
+                 <p>Design your own challenge</p>
+               </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="info-sections">
+          <div class="info-brand">
+            <div class="info-title"><div class="info-icon">C</div> CrossQuest</div>
+            <p class="info-desc">Empowering educators and puzzle lovers.</p>
+          </div>
+          <div class="info-links">
+            <div class="info-links-col">
+              <h4>Platform</h4>
+              <ul><li><a href="play.html" data-tooltip="Crossword">Browse</a></li>
+        <li><a href="create.html" data-tooltip="Create">Create</a></li></ul>
+            </div>
+            <div class="info-links-col">
+              <h4>Community</h4>
+              <ul><li><a href="forum.html" data-tooltip="Forum">Forum</a></li><li><a href="#">Help</a></li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

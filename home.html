@@ -1,0 +1,224 @@
+<!doctype html>
+<!-- File guide: Main dashboard page with bento cards for daily challenge, progress, puzzles, and quests. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CrossQuest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="home.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body class="bento-page">
+  <div class="app-layout">
+    <button class="mobile-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+    <nav class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon"></div>
+        <span>CrossQuest</span>
+      </div>
+            <ul class="sidebar-nav">
+        <li class="nav-section">MAIN</li>
+        <li><a href="home.html" class="active" data-tooltip="Home"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="play.html"  data-tooltip="Crossword"><i class="fa-solid fa-puzzle-piece"></i> Crossword</a></li>
+        
+        <li class="nav-section">STUDIO</li>
+        <li><a href="create.html"  data-tooltip="Create"><i class="fa-solid fa-circle-plus"></i> Create</a></li>
+        
+        <li class="nav-section">COMMUNITY</li>
+        <li><a href="leaderboard.html"  data-tooltip="Leaderboard"><i class="fa-solid fa-trophy"></i> Leaderboard</a></li>
+        <li><a href="forum.html"  data-tooltip="Forum"><i class="fa-regular fa-comments"></i> Forum</a></li>
+        
+        <li class="nav-section">ACCOUNT</li>
+        <li><a href="premium.html"  data-tooltip="Membership"><i class="fa-solid fa-crown"></i> Membership</a></li>
+      </ul>
+
+      <div class="user-profile animate-fade-in delay-500">
+        <div class="avatar user-avatar">A</div>
+        <div class="user-info">
+          <span class="username">ARENO</span>
+          <span class="user-edit">Edit Profile</span>
+        </div>
+      </div>
+    </nav>
+
+    <main class="main-area">
+      <div class="main-content full">
+
+        <!-- ===== BENTO GRID ===== -->
+        <div class="bento-grid">
+
+          <!-- Card 1: Daily Challenge (large, top-left) -->
+          <div class="bento-card bento-daily" id="bento-daily">
+            <div class="bento-card-inner">
+              <span class="daily-badge"><i class="fa-solid fa-bolt"></i> DAILY CHALLENGE</span>
+              <h1 class="daily-title">Ready to solve<br>today's puzzle?</h1>
+              <p class="daily-sub">Complete the daily crossword to earn <strong>+20 XP</strong> and keep your streak going!</p>
+              <button class="btn btn-green btn-lg" id="btn-start-daily" style="margin-top: 16px;">
+                <i class="fa-solid fa-play"></i> START TODAY'S PUZZLE
+              </button>
+              <div class="bento-daily-dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Level & Progress -->
+          <div class="bento-card bento-level" id="bento-level">
+            <div class="bento-card-inner">
+              <div class="bento-level-top">
+                <span class="bento-label">YOUR JOURNEY</span>
+                <div class="bento-streak-pill">
+                  <i class="fa-solid fa-fire bounce"></i>
+                  <span id="streak-count">0</span>
+                </div>
+              </div>
+              <div class="level-ring-container">
+                <div class="level-ring-wrap">
+                  <svg class="level-ring" viewBox="0 0 120 120">
+                    <circle class="ring-bg" cx="60" cy="60" r="54" />
+                    <circle class="ring-fill" cx="60" cy="60" r="54" id="level-ring-fill" />
+                  </svg>
+                  <div class="level-ring-label">
+                    <span class="level-num" id="level-badge">1</span>
+                    <span class="level-name">Beginner</span>
+                  </div>
+                </div>
+              </div>
+              <div class="bento-xp-row">
+                <span class="bento-xp-label"><span id="total-xp">0</span> XP TOTAL</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Word Scramble (small, mid-left) -->
+          <div class="bento-card bento-mini bento-scramble card-blue">
+            <div class="bento-card-inner">
+              <div class="bento-mini-top bento-mini-top-flex">
+                <div class="bento-mini-icon"><i class="fa-solid fa-shuffle"></i></div>
+                <i class="fa-solid fa-lock"></i>
+              </div>
+              <h4 class="bento-mini-title">Word Scramble</h4>
+              <p class="bento-mini-desc p-pro-badge">PRO only</p>
+            </div>
+          </div>
+
+          <!-- Card 4: Clue Match (small, mid-right of scramble) -->
+          <div class="bento-card bento-mini bento-match card-purple">
+            <div class="bento-card-inner">
+              <div class="bento-mini-top bento-mini-top-flex">
+                <div class="bento-mini-icon"><i class="fa-solid fa-link"></i></div>
+                <i class="fa-solid fa-lock"></i>
+              </div>
+              <h4 class="bento-mini-title">Clue Match</h4>
+              <p class="bento-mini-desc p-pro-badge">PRO only</p>
+            </div>
+          </div>
+
+          <!-- Card 5: Crossword Puzzles (medium) -->
+          <div class="bento-card bento-puzzles card-orange">
+            <div class="bento-card-inner">
+              <div class="bento-section-head">
+                <h3><i class="fa-solid fa-puzzle-piece"></i> Puzzles</h3>
+                <a href="play.html" class="see-all">See all <i class="fa-solid fa-chevron-right"></i></a>
+              </div>
+              <div class="bento-puzzle-list">
+                <div class="bento-puzzle-item" data-puzzle-topic="f1" style="cursor:pointer;">
+                  <div class="bpi-icon green"><i class="fa-solid fa-flag-checkered"></i></div>
+                  <div class="bpi-info">
+                    <strong>Formula 1 Grid</strong>
+                    <span>10×10 · ~5 min</span>
+                  </div>
+                  <div class="bpi-xp">+20 XP</div>
+                </div>
+                <div class="bento-puzzle-item" data-puzzle-topic="tech" style="cursor:pointer;">
+                  <div class="bpi-icon blue"><i class="fa-solid fa-microchip"></i></div>
+                  <div class="bpi-info">
+                    <strong>Tech & Code</strong>
+                    <span>8×8 · ~4 min</span>
+                  </div>
+                  <div class="bpi-xp">+15 XP</div>
+                </div>
+                <div class="bento-puzzle-item locked">
+                  <div class="bpi-icon"><i class="fa-solid fa-rocket"></i></div>
+                  <div class="bpi-info">
+                    <strong>Space Explorer</strong>
+                    <span>10×10 · PRO only</span>
+                  </div>
+                  <div class="bpi-lock"><i class="fa-solid fa-lock"></i></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 6: Leaderboard + Quests -->
+          <div class="bento-card bento-stats card-amber">
+            <div class="bento-card-inner">
+              <div class="bento-section-head">
+                <h3><i class="fa-solid fa-trophy"></i> Master Rankings</h3>
+                <a href="leaderboard.html" class="see-all">Full Board <i class="fa-solid fa-chevron-right"></i></a>
+              </div>
+              <div class="bento-stats-rows">
+                <div class="bento-lb-row gold">
+                  <div class="lb-avatar"><i class="fa-solid fa-award"></i></div>
+                  <span class="lb-name">MasterWordsmith</span>
+                  <span class="lb-score">9800</span>
+                </div>
+                <div class="bento-lb-row silver">
+                  <div class="lb-avatar"><i class="fa-solid fa-award"></i></div>
+                  <span class="lb-name">LexiconLover</span>
+                  <span class="lb-score">9550</span>
+                </div>
+                <div class="bento-lb-row bronze">
+                  <div class="lb-avatar"><i class="fa-solid fa-award"></i></div>
+                  <span class="lb-name">PuzzlePro</span>
+                  <span class="lb-score">9200</span>
+                </div>
+              </div>
+
+              <div class="quests-container">
+                <div class="bento-section-head">
+                  <h3><i class="fa-solid fa-bolt"></i> Active Quests</h3>
+                </div>
+                <div class="quest-item">
+                  <div class="quest-header">
+                    <span class="quest-title"><i class="fa-solid fa-bolt amber-text"></i> Earn 50 XP Today</span>
+                    <span class="quest-progress-text" id="daily-xp-text">0 / 50</span>
+                  </div>
+                  <div class="quest-bar-outer">
+                    <div class="quest-bar-fill xp-gradient" id="daily-xp-bar" style="width: 0%;"></div>
+                  </div>
+                </div>
+                <div class="quest-item">
+                  <div class="quest-header">
+                    <span class="quest-title"><i class="fa-solid fa-puzzle-piece forest-text"></i> Solve 2 Puzzles</span>
+                    <span class="quest-progress-text" id="daily-puzzle-text">0 / 2</span>
+                  </div>
+                  <div class="quest-bar-outer">
+                    <div class="quest-bar-fill puzzle-gradient" id="daily-puzzle-bar" style="width: 0%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- END BENTO GRID -->
+
+      </div>
+    </main>
+  </div>
+
+  <div class="xp-toast" id="xp-toast">+10 XP</div>
+
+  <script src="script.js"></script>
+
+</body>
+</html>

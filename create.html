@@ -1,0 +1,136 @@
+<!doctype html>
+<!-- File guide: Puzzle creation page with editor grid, settings, tools, and clue management panel. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CrossQuest | Create</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="create.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <button class="mobile-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+    <nav class="sidebar">
+      <div class="sidebar-logo"><div class="logo-icon"></div><span>CrossQuest</span></div>
+            <ul class="sidebar-nav">
+        <li class="nav-section">MAIN</li>
+        <li><a href="home.html"  data-tooltip="Home"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="play.html"  data-tooltip="Crossword"><i class="fa-solid fa-puzzle-piece"></i> Crossword</a></li>
+        
+        <li class="nav-section">STUDIO</li>
+        <li><a href="create.html" class="active" data-tooltip="Create"><i class="fa-solid fa-circle-plus"></i> Create</a></li>
+        
+        <li class="nav-section">COMMUNITY</li>
+        <li><a href="leaderboard.html"  data-tooltip="Leaderboard"><i class="fa-solid fa-trophy"></i> Leaderboard</a></li>
+        <li><a href="forum.html"  data-tooltip="Forum"><i class="fa-regular fa-comments"></i> Forum</a></li>
+        
+        <li class="nav-section">ACCOUNT</li>
+        <li><a href="premium.html"  data-tooltip="Membership"><i class="fa-solid fa-crown"></i> Membership</a></li>
+      </ul>
+
+      <div class="user-profile animate-fade-in delay-500">
+        <div class="avatar user-avatar">A</div>
+        <div class="user-info">
+          <span class="username">ARENO</span>
+          <span class="user-edit">Edit Profile</span>
+        </div>
+      </div>
+    </nav>
+
+    <main class="main-area">
+      <div class="main-content full">
+
+        <!-- Hero Banner -->
+        <div class="create-hero animate-slide-up">
+          <div class="create-hero-content">
+            <div class="create-hero-icon">🧩</div>
+            <div>
+              <h1 class="create-hero-title">Puzzle Builder</h1>
+              <p class="create-hero-sub">Design, build, and share your own crossword puzzles with the community</p>
+            </div>
+          </div>
+          <div class="create-hero-actions">
+            <button class="btn btn-outline" id="btn-generate-grid"><i class="fa-solid fa-arrows-rotate"></i> New Grid</button>
+            <button class="btn btn-white" id="btn-save-puzzle"><i class="fa-solid fa-paper-plane"></i> Publish</button>
+          </div>
+        </div>
+
+        <!-- Two-Column Editor Layout -->
+        <div class="create-editor-layout animate-slide-up delay-100">
+
+          <!-- LEFT: Grid Area -->
+          <div class="create-grid-col">
+            <div class="card build-card">
+              <div id="creator-board" class="crossword-board editor-mode"></div>
+            </div>
+          </div>
+
+          <!-- RIGHT: Settings + Clue Editor -->
+          <div class="create-sidebar-col">
+
+            <!-- Settings Panel -->
+            <div class="create-panel animate-slide-up delay-200">
+              <div class="create-panel-header">
+                <i class="fa-solid fa-sliders"></i>
+                <h3>Settings</h3>
+              </div>
+
+              <div class="create-field">
+                <label><i class="fa-solid fa-heading"></i> Puzzle Title</label>
+                <input type="text" id="create-title" placeholder="My Awesome Puzzle" class="input-field" />
+              </div>
+
+              <div class="create-field">
+                <label><i class="fa-solid fa-table-cells"></i> Grid Size</label>
+                <div class="size-pills">
+                  <button class="size-pill" data-size="5">5×5</button>
+                  <button class="size-pill" data-size="8">8×8</button>
+                  <button class="size-pill active" data-size="10">10×10</button>
+                </div>
+                <!-- Hidden select for script.js compatibility -->
+                <select id="create-size" class="chip-select" style="display:none;">
+                  <option value="5">5×5 Mini</option>
+                  <option value="8">8×8 Medium</option>
+                  <option value="10" selected>10×10 Standard</option>
+                </select>
+              </div>
+
+              <div class="create-field">
+                <label><i class="fa-solid fa-screwdriver-wrench"></i> Tools</label>
+                <div class="create-tools-bar">
+                  <button class="tool-btn active" title="Select" id="tool-select"><i class="fa-solid fa-mouse-pointer"></i><span>Select</span></button>
+                  <button class="tool-btn" title="Toggle Black" id="tool-block"><i class="fa-solid fa-square"></i><span>Block</span></button>
+                  <button class="tool-btn" title="Fill Black" id="tool-fill-black"><i class="fa-solid fa-fill-drip"></i><span>Fill</span></button>
+                  <button class="tool-btn" title="Clear" onclick="document.getElementById('btn-generate-grid').click()"><i class="fa-solid fa-eraser"></i><span>Clear</span></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Clue Editor Panel -->
+            <div class="create-panel animate-slide-up delay-300">
+              <div class="create-panel-header">
+                <i class="fa-solid fa-list-check"></i>
+                <h3>Clue Editor</h3>
+              </div>
+              <div id="creator-clues-container">
+                <div class="empty-clues-state">
+                  <i class="fa-regular fa-lightbulb"></i>
+                  <p>Start typing letters into the grid.<br>Clues will auto-generate for each word.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

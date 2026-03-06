@@ -1,0 +1,107 @@
+<!doctype html>
+<!-- File guide: Active gameplay page with crossword board, timer, score, clues, and completion modal. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CrossQuest | Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="game.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <button class="mobile-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+    <nav class="sidebar">
+      <div class="sidebar-logo"><div class="logo-icon"></div><span>CrossQuest</span></div>
+            <ul class="sidebar-nav">
+        <li class="nav-section">MAIN</li>
+        <li><a href="home.html"  data-tooltip="Home"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="play.html" class="active" data-tooltip="Crossword"><i class="fa-solid fa-puzzle-piece"></i> Crossword</a></li>
+        
+        <li class="nav-section">STUDIO</li>
+        <li><a href="create.html"  data-tooltip="Create"><i class="fa-solid fa-circle-plus"></i> Create</a></li>
+        
+        <li class="nav-section">COMMUNITY</li>
+        <li><a href="leaderboard.html"  data-tooltip="Leaderboard"><i class="fa-solid fa-trophy"></i> Leaderboard</a></li>
+        <li><a href="forum.html"  data-tooltip="Forum"><i class="fa-regular fa-comments"></i> Forum</a></li>
+        
+        <li class="nav-section">ACCOUNT</li>
+        <li><a href="premium.html"  data-tooltip="Membership"><i class="fa-solid fa-crown"></i> Membership</a></li>
+      </ul>
+
+      <div class="user-profile animate-fade-in delay-500">
+        <div class="avatar user-avatar">A</div>
+        <div class="user-info">
+          <span class="username">ARENO</span>
+          <span class="user-edit">Edit Profile</span>
+        </div>
+      </div>
+    </nav>
+
+    <main class="main-area">
+      <div class="main-content wide">
+        <header class="play-header">
+          <h2 id="puzzle-title-display" class="page-title c-play-title">Custom Puzzle</h2>
+          <span id="puzzle-difficulty-display" class="difficulty-tag">Custom</span>
+        </header>
+
+        <div class="play-layout">
+          <div class="play-grid-area">
+            <div class="card crossword-board" id="crossword-board"></div>
+          </div>
+
+          <div class="play-sidebar-area">
+            <div class="card play-timer-card">
+              <div class="timer-display" id="timer">00:00</div>
+              <div class="score-display">
+                <span class="score-label">Score</span>
+                <span class="score-value" id="score">0</span>
+              </div>
+              <div class="controls-actions">
+                <button class="btn btn-green w-100" id="btn-check"><i class="fa-solid fa-check-double"></i> Submit</button>
+                <div class="c-stats-grid">
+                  <button class="btn btn-outline w-100" id="btn-show-solution"><i class="fa-solid fa-eye"></i> Show</button>
+                  <button class="btn btn-outline w-100" id="btn-reset"><i class="fa-solid fa-rotate-right"></i> Reset</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card play-clues-card">
+              <div class="clues-header">
+                <button class="clue-tab active" onclick="switchClueTab('across')">Across</button>
+                <button class="clue-tab" onclick="switchClueTab('down')">Down</button>
+              </div>
+              <div id="clues-across" class="clues-section active"><ul class="clues-list" id="across-list"></ul></div>
+              <div id="clues-down" class="clues-section"><ul class="clues-list" id="down-list"></ul></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Win Modal -->
+    <div class="modal-overlay" id="success-modal">
+      <div class="card text-center c-modal-card">
+        <h2 class="c-modal-title">Magnificent!</h2>
+        <p class="c-modal-desc">You conquered the grid with precision!</p>
+        <div class="c-modal-stats">
+          <div class="c-stat-col"><span class="c-stat-label">Time</span><br><strong id="final-time" class="c-stat-val">02:14</strong></div>
+          <div class="c-stat-col"><span class="c-stat-label">Score</span><br><strong id="final-score" class="c-stat-val green">9400</strong></div>
+        </div>
+        <div class="c-modal-actions">
+          <button class="btn btn-green w-100" id="btn-close-modal">View Rankings</button>
+          <button class="btn btn-outline w-100" onclick="window.location.href='home.html'">Return Home</button>
+        </div>
+      </div>
+    </div>
+    <canvas id="confetti-canvas"></canvas>
+    <div class="xp-toast" id="xp-toast">+20 XP</div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
+<script src="game.js"></script>

@@ -1,0 +1,615 @@
+/* game.css */
+/* File guide: Styles gameplay UI including board cells, timer panel, clues panel, and theme-specific variants. */
+
+/* Ensure game-only feedback tokens exist (style.css doesn't define these legacy names) */
+:root {
+  --success: var(--color-success);
+  --error: var(--color-error);
+  --warning: var(--color-warning);
+  --success-bg: rgba(62, 122, 92, 0.14);
+  --error-bg: rgba(255, 75, 75, 0.14);
+  --red-dark: var(--color-forest-900);
+}
+
+.play-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto 20px auto;
+  width: 100%;
+  max-width: 820px;
+}
+.difficulty-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 14px;
+  background: var(--green-light);
+  color: var(--green);
+  border-radius: var(--radius);
+  border: 2px solid rgba(88, 204, 2, 0.2);
+  font-weight: 800;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Difficulty modifiers (used by script.js) */
+.tag-med {
+  background: rgba(255, 150, 0, 0.16);
+  color: #C2410C;
+  border-color: rgba(255, 150, 0, 0.22);
+}
+.tag-hard {
+  background: rgba(255, 75, 75, 0.16);
+  color: #B91C1C;
+  border-color: rgba(255, 75, 75, 0.22);
+}
+
+.play-layout {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: start !important;
+  gap: 20px !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+}
+.play-grid-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.crossword-board {
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  gap: 4px;
+  background: #FFFFFF;
+  padding: 24px;
+  border-radius: 16px;
+  border: 2px solid var(--color-border-subtle);
+  border-bottom: 5px solid var(--color-border-dark);
+}
+
+/* =============================
+   F1 Theme (decorative only)
+   ============================= */
+body[data-game-theme="f1"] {
+  /* Re-map the existing green accent system to F1 red/black/white */
+  --green: var(--color-error);
+  --green-dark: var(--color-forest-900);
+  --green-accent: var(--color-error);
+  --green-accent-dark: var(--color-forest-900);
+}
+
+/* =============================
+   Tech & Code Theme (decorative)
+   ============================= */
+body[data-game-theme="tech"] {
+  /* Use the existing blue palette already used by .card-blue */
+  --tech-blue: #3b82f6;
+  --tech-blue-dark: #1d4ed8;
+  --green: var(--tech-blue);
+  --green-dark: var(--tech-blue-dark);
+  --green-accent: var(--tech-blue);
+  --green-accent-dark: var(--tech-blue-dark);
+}
+
+body[data-game-theme="tech"] #puzzle-difficulty-display {
+  background: rgba(59, 130, 246, 0.12);
+  color: var(--tech-blue-dark);
+  border-color: rgba(59, 130, 246, 0.28);
+}
+
+body[data-game-theme="tech"] .crossword-board {
+  position: relative;
+  overflow: hidden;
+  background-color: #FBFDFF;
+  border-color: rgba(59, 130, 246, 0.22);
+  border-bottom-color: var(--tech-blue-dark);
+  box-shadow: 0 18px 42px rgba(27, 58, 45, 0.08);
+}
+
+/* Circuit-board overlay (behind cells) */
+body[data-game-theme="tech"] .crossword-board::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='720' height='720'%3E%3Crect width='720' height='720' fill='none'/%3E%3Cg fill='none' stroke='%233b82f6' stroke-opacity='0.18' stroke-width='10' stroke-linecap='round'%3E%3Cpath d='M70 130h220'/%3E%3Cpath d='M290 130v110'/%3E%3Cpath d='M290 240h90'/%3E%3Cpath d='M380 240v120'/%3E%3Cpath d='M380 360h150'/%3E%3Cpath d='M560 90v170'/%3E%3Cpath d='M560 260h90'/%3E%3Cpath d='M650 260v140'/%3E%3Cpath d='M650 400h-140'/%3E%3Cpath d='M510 400v90'/%3E%3Cpath d='M510 490h-110'/%3E%3Cpath d='M400 490v160'/%3E%3Cpath d='M140 610h210'/%3E%3Cpath d='M140 610v-120'/%3E%3Cpath d='M140 490h120'/%3E%3C/g%3E%3Cg fill='%231d4ed8' fill-opacity='0.16'%3E%3Ccircle cx='70' cy='130' r='10'/%3E%3Ccircle cx='290' cy='130' r='10'/%3E%3Ccircle cx='380' cy='240' r='10'/%3E%3Ccircle cx='560' cy='90' r='10'/%3E%3Ccircle cx='650' cy='260' r='10'/%3E%3Ccircle cx='400' cy='490' r='10'/%3E%3Ccircle cx='140' cy='610' r='10'/%3E%3C/g%3E%3Cpath d='M50 60h260' stroke='%231d4ed8' stroke-opacity='0.12' stroke-width='18' stroke-linecap='round'/%3E%3Cpath d='M50 92h210' stroke='%231d4ed8' stroke-opacity='0.08' stroke-width='18' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right -170px top -90px;
+  background-size: 720px 720px;
+}
+
+body[data-game-theme="tech"] .cw-cell {
+  z-index: 1;
+}
+
+body[data-game-theme="tech"] .play-timer-card,
+body[data-game-theme="tech"] .play-clues-card {
+  border-color: rgba(59, 130, 246, 0.18);
+  border-bottom-color: rgba(29, 78, 216, 0.60);
+  box-shadow: 0 14px 34px rgba(27, 58, 45, 0.06);
+}
+
+body[data-game-theme="tech"] #btn-check,
+body[data-game-theme="tech"] #btn-close-modal {
+  background: var(--tech-blue);
+  border-bottom-color: var(--tech-blue-dark);
+}
+
+body[data-game-theme="tech"] #btn-check:hover {
+  box-shadow: 0 12px 30px rgba(27, 58, 45, 0.14);
+}
+
+body[data-game-theme="tech"] .cw-cell.highlight {
+  background: var(--tech-blue);
+  border-color: rgba(59, 130, 246, 0.70);
+  border-bottom: 4px solid var(--tech-blue-dark);
+}
+body[data-game-theme="tech"] .cw-cell.highlight input {
+  color: white;
+}
+
+body[data-game-theme="tech"] .cw-cell input {
+  caret-color: var(--tech-blue);
+}
+
+body[data-game-theme="tech"] .clue-tab:hover {
+  color: var(--tech-blue-dark);
+  background: rgba(59, 130, 246, 0.08);
+}
+body[data-game-theme="tech"] .clue-tab.active {
+  color: var(--tech-blue-dark);
+  background: rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.55);
+  border-bottom-color: var(--tech-blue-dark);
+}
+body[data-game-theme="f1"] .play-header .c-play-title {
+  position: relative;
+}
+
+body[data-game-theme="f1"] #puzzle-difficulty-display {
+  background: rgba(255, 75, 75, 0.14);
+  color: var(--color-forest-900);
+  border-color: rgba(255, 75, 75, 0.28);
+}
+
+body[data-game-theme="f1"] .crossword-board {
+  position: relative;
+  overflow: hidden;
+  background-color: #FFFDF9;
+  border-color: rgba(255, 75, 75, 0.22);
+  border-bottom-color: var(--color-error);
+  box-shadow: 0 18px 42px rgba(27, 58, 45, 0.08);
+}
+
+/* Cleaner decorative overlay: checkered corner + track stripe (behind cells) */
+body[data-game-theme="f1"] .crossword-board::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='620' height='620'%3E%3Crect width='620' height='620' fill='none'/%3E%3Cg%3E%3Cpath d='M90 560h440' stroke='%23FF4B4B' stroke-opacity='0.22' stroke-width='22' stroke-linecap='round'/%3E%3Cpath d='M110 590h360' stroke='%23FF4B4B' stroke-opacity='0.12' stroke-width='22' stroke-linecap='round'/%3E%3C/g%3E%3Cg fill='%23000000' fill-opacity='0.09'%3E%3Crect x='430' y='36' width='34' height='34'/%3E%3Crect x='464' y='70' width='34' height='34'/%3E%3Crect x='498' y='36' width='34' height='34'/%3E%3Crect x='532' y='70' width='34' height='34'/%3E%3Crect x='430' y='104' width='34' height='34'/%3E%3Crect x='464' y='138' width='34' height='34'/%3E%3Crect x='498' y='104' width='34' height='34'/%3E%3Crect x='532' y='138' width='34' height='34'/%3E%3C/g%3E%3Cpath d='M410 26h190v190' fill='none' stroke='%23FF4B4B' stroke-opacity='0.18' stroke-width='10' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right -120px top -60px;
+  background-size: 620px 620px;
+}
+
+body[data-game-theme="f1"] .cw-cell {
+  z-index: 1;
+}
+
+body[data-game-theme="f1"] .play-timer-card,
+body[data-game-theme="f1"] .play-clues-card {
+  border-color: rgba(255, 75, 75, 0.18);
+  border-bottom-color: rgba(27, 58, 45, 0.65);
+  box-shadow: 0 14px 34px rgba(27, 58, 45, 0.06);
+}
+
+body[data-game-theme="f1"] #btn-check {
+  background: var(--color-error);
+  border-bottom-color: var(--color-forest-900);
+}
+
+body[data-game-theme="f1"] #btn-check:hover {
+  box-shadow: 0 12px 30px rgba(27, 58, 45, 0.14);
+}
+
+body[data-game-theme="f1"] #btn-close-modal {
+  background: var(--color-error);
+  border-bottom-color: var(--color-forest-900);
+}
+
+body[data-game-theme="f1"] .cw-cell.highlight {
+  background: var(--color-error);
+  border-color: rgba(255, 75, 75, 0.75);
+  border-bottom: 4px solid var(--color-forest-900);
+}
+body[data-game-theme="f1"] .cw-cell.highlight input {
+  color: white;
+}
+
+body[data-game-theme="f1"] .cw-cell input {
+  caret-color: var(--color-error);
+}
+
+body[data-game-theme="f1"] .clue-tab:hover {
+  color: var(--color-forest-900);
+  background: rgba(255, 75, 75, 0.08);
+}
+body[data-game-theme="f1"] .clue-tab.active {
+  color: var(--color-forest-900);
+  background: rgba(255, 75, 75, 0.12);
+  border-color: rgba(255, 75, 75, 0.55);
+  border-bottom-color: var(--color-forest-900);
+}
+
+.cw-cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  border-radius: 10px;
+  background-color: #ffffff;
+  border: 2.5px solid #999999;
+  border-bottom: 4px solid #777777;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.cw-cell.black-cell {
+  background-color: var(--text-primary);
+  border-color: #2a2a2a;
+  border-bottom-color: #1a1a1a;
+  cursor: default;
+}
+.cw-cell input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 800;
+  font-family: var(--font-main);
+  text-transform: uppercase;
+  color: var(--text-primary);
+  outline: none;
+  caret-color: var(--green);
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  z-index: 2;
+}
+
+.cw-cell.highlight {
+  background: var(--green-accent);
+  border-color: var(--green-accent-dark);
+  border-bottom: 4px solid var(--green-accent-dark);
+  z-index: 10;
+}
+.cw-cell.highlight input {
+  color: white;
+}
+.cw-cell .cell-number {
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  font-size: 0.58rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  z-index: 1;
+  opacity: 0.9;
+}
+
+.cw-cell.correct {
+  background: var(--success-bg);
+  border-color: var(--success);
+  border-bottom: 4px solid var(--green-dark);
+  animation: correctPop 0.4s ease;
+}
+.cw-cell.correct input {
+  color: var(--success);
+}
+.cw-cell.incorrect {
+  background: var(--error-bg);
+  border-color: var(--error);
+  border-bottom: 4px solid var(--red-dark);
+  animation: shake 0.5s ease;
+}
+.cw-cell.incorrect input {
+  color: var(--error);
+}
+
+.play-sidebar-area {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 300px;
+  flex-shrink: 0;
+}
+.play-timer-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+  background: #FFFFFF;
+  border-radius: 16px;
+  border: 2px solid var(--color-border-subtle);
+  border-bottom: 5px solid var(--color-border-dark);
+}
+.controls-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+.c-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.timer-display {
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  text-align: center;
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.score-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: var(--bg-hover);
+  border-radius: var(--radius);
+  border: 2px solid var(--border-color);
+  border-bottom: 3px solid var(--border-dark);
+}
+.score-label {
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.75rem;
+}
+.score-value {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--green);
+}
+
+.play-clues-card {
+  max-height: calc(100vh - 360px);
+  overflow-y: auto;
+  padding: 16px;
+}
+.clues-section {
+  display: none;
+}
+.clues-section.active {
+  display: block;
+}
+.clues-header {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 8px;
+}
+.clue-tab {
+  padding: 8px 14px;
+  background: transparent;
+  border: 2px solid transparent;
+  font-family: var(--font-main);
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+  border-radius: var(--radius-sm);
+}
+.clue-tab:hover {
+  color: var(--green-dark);
+  background: var(--green-accent-light);
+}
+.clue-tab.active {
+  color: var(--green-dark);
+  background: var(--green-accent-bg);
+  border-color: var(--green-accent);
+  border-bottom: 3px solid var(--green-accent-dark);
+}
+
+.clues-list {
+  list-style: none;
+}
+.clues-list li {
+  padding: 8px 10px;
+  margin-bottom: 5px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.85rem;
+  display: flex;
+  gap: 8px;
+  background: var(--bg-surface);
+  border: 2px solid var(--border-color);
+  border-bottom: 3px solid var(--border-dark);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+@media (max-width: 980px) {
+  .play-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .play-layout {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .play-grid-area {
+    width: 100%;
+  }
+
+  .play-sidebar-area {
+    width: 100%;
+  }
+
+  .play-clues-card {
+    max-height: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .crossword-board {
+    padding: 12px;
+    gap: 2px;
+  }
+
+  .cw-cell {
+    border-width: 2px;
+    border-bottom-width: 3px;
+  }
+
+  .cw-cell input {
+    font-size: 1.05rem;
+  }
+
+  .timer-display {
+    font-size: 2.2rem;
+  }
+}
+
+/* WORD SCRAMBLE GAME */
+.scramble-game {
+  text-align: center;
+  padding: 32px 24px;
+}
+.scramble-clue {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-bottom: 18px;
+  padding: 14px;
+  background: var(--bg-hover);
+  border-radius: var(--radius);
+  border: 2px solid var(--border-color);
+  border-bottom: 3px solid var(--border-dark);
+}
+
+.scramble-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+.scramble-tile {
+  width: 54px;
+  height: 54px;
+  background: var(--bg-surface);
+  border: 2px solid var(--border-color);
+  border-bottom: 4px solid var(--border-dark);
+  border-radius: var(--radius-sm);
+  font-size: 1.3rem;
+  font-weight: 800;
+  font-family: var(--font-main);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: popIn 0.3s ease forwards;
+  opacity: 0;
+}
+
+.scramble-answer {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+.answer-slot {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  border: 3px dashed var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-tertiary);
+  transition: var(--transition);
+}
+.answer-slot.filled {
+  border-style: solid;
+  border-color: var(--green);
+  border-bottom: 4px solid var(--green-dark);
+  color: var(--green);
+  background: var(--green-light);
+  cursor: pointer;
+  animation: tilePlace 0.25s ease;
+}
+
+/* CLUE MATCH GAME */
+.match-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  background: var(--bg-page);
+  border: 2px solid var(--border-color);
+  border-bottom: 5px solid var(--border-dark);
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+.match-column {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.match-card {
+  padding: 12px 16px;
+  background: var(--bg-surface);
+  border: 2px solid var(--border-color);
+  border-bottom: 4px solid var(--border-dark);
+  border-radius: var(--radius);
+  font-family: var(--font-main);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-align: center;
+  animation: popIn 0.3s ease forwards;
+  opacity: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.c-modal-card { max-width: 400px; width: 100%; padding: 36px; }
+.c-modal-title { font-size: 2rem; margin-bottom: 6px; }
+.c-modal-desc { color: var(--text-secondary); margin-bottom: 20px; }
+.c-modal-stats { display: flex; justify-content: space-around; background: var(--bg-hover); padding: 16px; border-radius: var(--radius); margin-bottom: 24px; border: 2px solid var(--border-color); border-bottom: 3px solid var(--border-dark); }
+.c-stat-col { text-align: center; }
+.c-stat-label { font-size: 0.72rem; font-weight: 700; color: var(--text-tertiary); text-transform: uppercase; }
+.c-stat-val { font-size: 1.4rem; font-weight: 900; }
+.c-stat-val.green { color: var(--green); }
+.c-modal-actions { display: flex; flex-direction: column; gap: 8px; }

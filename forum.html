@@ -1,0 +1,99 @@
+<!doctype html>
+<!-- File guide: Community discussion page for posting, browsing topics, and engaging with other players. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CrossQuest | Forum</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="forum.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <button class="mobile-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+    <nav class="sidebar">
+      <div class="sidebar-logo"><div class="logo-icon"></div><span>CrossQuest</span></div>
+            <ul class="sidebar-nav">
+        <li class="nav-section">MAIN</li>
+        <li><a href="home.html"  data-tooltip="Home"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="play.html"  data-tooltip="Crossword"><i class="fa-solid fa-puzzle-piece"></i> Crossword</a></li>
+        
+        <li class="nav-section">STUDIO</li>
+        <li><a href="create.html"  data-tooltip="Create"><i class="fa-solid fa-circle-plus"></i> Create</a></li>
+        
+        <li class="nav-section">COMMUNITY</li>
+        <li><a href="leaderboard.html"  data-tooltip="Leaderboard"><i class="fa-solid fa-trophy"></i> Leaderboard</a></li>
+        <li><a href="forum.html" class="active" data-tooltip="Forum"><i class="fa-regular fa-comments"></i> Forum</a></li>
+        
+        <li class="nav-section">ACCOUNT</li>
+        <li><a href="premium.html"  data-tooltip="Membership"><i class="fa-solid fa-crown"></i> Membership</a></li>
+      </ul>
+
+      <div class="user-profile animate-fade-in delay-500">
+        <div class="avatar user-avatar">A</div>
+        <div class="user-info">
+          <span class="username">ARENO</span>
+          <span class="user-edit">Edit Profile</span>
+        </div>
+      </div>
+    </nav>
+
+    <main class="main-area">
+      <div class="main-content full">
+
+        <!-- Header with New Post Button -->
+        <div class="forum-header animate-slide-up">
+          <div>
+            <h1 class="page-title"><i class="fa-solid fa-comments"></i> Community</h1>
+            <p class="text-secondary-p">Discuss strategies and share tips with fellow solvers</p>
+          </div>
+          <button class="btn btn-green" id="btn-new-post">
+            <i class="fa-solid fa-pen"></i> NEW POST
+          </button>
+        </div>
+
+        <!-- Compose Section -->
+        <div class="compose-section animate-slide-up delay-100" id="compose-section">
+          <h3><i class="fa-solid fa-pen-nib"></i> Start a Discussion</h3>
+          <div class="compose-card">
+            <div class="compose-user">
+              <div class="forum-avatar compose-avatar"><i class="fa-solid fa-user"></i></div>
+              <input type="text" id="forum-username" class="compose-name-input" placeholder="Your name" />
+            </div>
+            <textarea id="forum-content" class="compose-textarea" placeholder="Share a tip, ask a question, or show off your puzzle..." rows="4"></textarea>
+            <div class="compose-footer">
+              <div class="compose-tags">
+                <button class="tag-btn active" data-tag="tips"><i class="fa-solid fa-lightbulb"></i> Tip</button>
+                <button class="tag-btn" data-tag="help"><i class="fa-solid fa-circle-question"></i> Help</button>
+                <button class="tag-btn" data-tag="showcase"><i class="fa-solid fa-star"></i> Showcase</button>
+              </div>
+              <button class="btn btn-green" id="btn-publish-post"><i class="fa-solid fa-paper-plane"></i> PUBLISH</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Topic Categories -->
+        <div class="forum-topics animate-slide-up delay-150">
+          <button class="topic-chip active"><i class="fa-solid fa-bolt"></i> All</button>
+          <button class="topic-chip"><i class="fa-solid fa-lightbulb"></i> Tips</button>
+          <button class="topic-chip"><i class="fa-solid fa-puzzle-piece"></i> Puzzles</button>
+          <button class="topic-chip"><i class="fa-solid fa-circle-question"></i> Help</button>
+          <button class="topic-chip"><i class="fa-solid fa-star"></i> Showcase</button>
+        </div>
+
+        <!-- Posts Feed -->
+        <div class="forum-feed animate-slide-up delay-200" id="forum-feed">
+          <!-- Populated by JS -->
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

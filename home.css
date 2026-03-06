@@ -1,0 +1,695 @@
+/* =========================================
+   BENTO GRID DASHBOARD LAYOUT
+   Forest Green + Cream White Theme
+   ========================================= */
+/* File guide: Controls the home dashboard card grid, card variants, and breakpoint behavior. */
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 16px;
+  padding: 8px 0;
+
+  /* Forest / Cream color tokens scoped to grid */
+  --forest-deep: #1B3A2D;
+  --forest-mid: #2D5E45;
+  --forest-soft: #3E7A5C;
+  --forest-light: #5A9E78;
+  --cream: #FFFDF7;
+  --cream-warm: #F8F3EB;
+  --cream-dark: #EDE6D8;
+  --cream-border: #D6CCBA;
+  --forest-text: #1B3A2D;
+  --forest-text-secondary: #3E5E4E;
+  --forest-text-muted: #7A9486;
+}
+
+/* ---- Base Card ---- */
+.bento-card {
+  background: #FFFFFF;
+  border-radius: 24px;
+  border: 2px solid #D6CCBA;
+  border-bottom: 6px solid #1B3A2D;
+  overflow: hidden;
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+  position: relative;
+}
+/* Removed gradient overlay for solid card match */
+.bento-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px rgba(27, 58, 45, 0.12);
+  border-color: var(--color-forest-500);
+}
+.bento-card-inner {
+  position: relative;
+  z-index: 1;
+  padding: 28px 24px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Card 1: Daily Challenge (top-left) ---- */
+.bento-daily {
+  background: 
+    linear-gradient(
+      145deg,
+      #2D5E45 0%,
+      #3E7A5C 100%
+    );
+  border-color: #244B37;
+  border-bottom: 6px solid #1B3A2D;
+}
+.bento-daily:hover {
+  border-color: var(--color-forest-400);
+  box-shadow: 0 16px 48px rgba(27, 58, 45, 0.2);
+}
+.bento-daily .daily-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #a0e870;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  margin-bottom: 18px;
+  width: fit-content;
+  animation: badgePulse 2.5s ease infinite;
+}
+.bento-daily .daily-title {
+  font-size: 1.6rem;
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+.bento-daily .daily-sub {
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+}
+.bento-daily .daily-sub strong {
+  color: #a0e870;
+}
+.bento-daily .btn-green {
+  background: #FFFDF7; /* Ivory matching cards */
+  color: #2D5E45;
+  border: none;
+  border-bottom: 4px solid #D6CCBA;
+  font-weight: 900;
+}
+.bento-daily .btn-green:hover {
+  background: #FFFDF7;
+  transform: translateY(-2px);
+}
+
+/* Navigation dots in daily card */
+.bento-daily-dots {
+  display: flex;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 18px;
+}
+.bento-daily-dots .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+.bento-daily-dots .dot.active {
+  background: #A0E870;
+  width: 28px;
+  border-radius: 10px;
+}
+
+/* ---- Card 2: Level & Progress (top-right) ---- */
+.bento-level {
+  background: var(--color-bg-surface);
+  border-color: var(--color-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bento-level:hover {
+  border-color: var(--color-forest-500);
+  box-shadow: 0 12px 36px rgba(27, 58, 45, 0.1);
+}
+.bento-level .bento-card-inner {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.bento-level-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 16px;
+}
+.bento-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--color-text-mut);
+  text-transform: uppercase;
+}
+.bento-streak-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #FFEBBF;
+  color: #FF9600;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+.bento-streak-pill i {
+  font-size: 0.85rem;
+}
+
+/* Progress Ring + Level Card */
+.bento-level .bento-card-inner {
+  justify-content: flex-start;
+  padding: 32px 28px;
+}
+.level-ring-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.level-ring-wrap {
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+.level-ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.ring-bg {
+  fill: none;
+  stroke: #F4F0E6; /* Subtle off-white for the background of the ring */
+  stroke-width: 12;
+}
+.ring-fill {
+  fill: none;
+  stroke-width: 14;
+  stroke-linecap: round;
+  stroke: #2D5E45;
+  transition: stroke-dashoffset 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.level-ring-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.level-num {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: #1B3A2D;
+  line-height: 1;
+}
+.level-name {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #7A9486;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 2px;
+}
+.bento-xp-row {
+  width: 100%;
+  text-align: center;
+}
+.bento-xp-label {
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: #1B3A2D;
+  letter-spacing: 0.5px;
+}
+.bento-xp-label span {
+  color: #2D5E45;
+}
+
+/* ---- Cards 3 & 4: Mini Game Cards ---- */
+.bento-mini {
+  cursor: pointer;
+}
+.bento-mini .bento-card-inner {
+  padding: 22px 20px;
+}
+.bento-mini-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.bento-mini-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: rgba(45, 94, 69, 0.1);
+  color: var(--color-forest-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
+}
+.bento-mini:hover .bento-mini-icon {
+  transform: rotate(-8deg) scale(1.1);
+}
+.bento-mini-badge {
+  background: rgba(45, 94, 69, 0.08);
+  color: var(--color-forest-600);
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.3px;
+}
+.bento-mini-badge.purple {
+  background: rgba(206, 130, 255, 0.08);
+  color: var(--purple);
+}
+.bento-mini-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--color-text-pri);
+  margin-bottom: 4px;
+}
+.bento-mini-desc {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-text-mut);
+}
+
+.bento-scramble {
+  border-color: rgba(45, 94, 69, 0.15);
+}
+.bento-scramble:hover {
+  border-color: var(--color-forest-500);
+  box-shadow: 0 12px 36px rgba(45, 94, 69, 0.08);
+}
+.bento-match {
+  border-color: rgba(206, 130, 255, 0.12);
+}
+.bento-match:hover {
+  border-color: var(--purple);
+  box-shadow: 0 12px 36px rgba(206, 130, 255, 0.08);
+}
+
+/* Themed backgrounds for the two locked mini-games (scoped to Home only) */
+.bento-scramble.card-blue {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Ctext x='10' y='38' font-family='Nunito,sans-serif' font-size='36' font-weight='900' fill='rgba(59,130,246,0.18)' transform='rotate(-18 10 38)'%3EW%3C/text%3E%3Ctext x='70' y='55' font-family='Nunito,sans-serif' font-size='28' font-weight='800' fill='rgba(59,130,246,0.15)' transform='rotate(22 70 55)'%3EO%3C/text%3E%3Ctext x='130' y='40' font-family='Nunito,sans-serif' font-size='32' font-weight='900' fill='rgba(59,130,246,0.17)' transform='rotate(-10 130 40)'%3ER%3C/text%3E%3Ctext x='35' y='100' font-family='Nunito,sans-serif' font-size='34' font-weight='800' fill='rgba(59,130,246,0.16)' transform='rotate(30 35 100)'%3ED%3C/text%3E%3Ctext x='105' y='105' font-family='Nunito,sans-serif' font-size='30' font-weight='900' fill='rgba(59,130,246,0.14)' transform='rotate(-25 105 105)'%3ES%3C/text%3E%3Ctext x='160' y='95' font-family='Nunito,sans-serif' font-size='26' font-weight='800' fill='rgba(59,130,246,0.18)' transform='rotate(15 160 95)'%3EA%3C/text%3E%3Ctext x='15' y='160' font-family='Nunito,sans-serif' font-size='30' font-weight='900' fill='rgba(59,130,246,0.15)' transform='rotate(-12 15 160)'%3EC%3C/text%3E%3Ctext x='80' y='170' font-family='Nunito,sans-serif' font-size='38' font-weight='900' fill='rgba(59,130,246,0.17)' transform='rotate(20 80 170)'%3EM%3C/text%3E%3Ctext x='150' y='160' font-family='Nunito,sans-serif' font-size='32' font-weight='800' fill='rgba(59,130,246,0.16)' transform='rotate(-28 150 160)'%3EL%3C/text%3E%3Ctext x='55' y='195' font-family='Nunito,sans-serif' font-size='24' font-weight='900' fill='rgba(59,130,246,0.14)' transform='rotate(35 55 195)'%3EB%3C/text%3E%3Ctext x='140' y='190' font-family='Nunito,sans-serif' font-size='28' font-weight='800' fill='rgba(59,130,246,0.18)' transform='rotate(-8 140 190)'%3EE%3C/text%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
+.bento-match.card-purple {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Ctext x='10' y='30' font-family='Nunito,sans-serif' font-size='20' font-weight='900' fill='rgba(168,85,247,0.16)' transform='rotate(-8 10 30)'%3ECLUE%3C/text%3E%3Ctext x='120' y='28' font-family='Nunito,sans-serif' font-size='18' font-weight='800' fill='rgba(168,85,247,0.14)' transform='rotate(12 120 28)'%3EMATCH%3C/text%3E%3Ctext x='80' y='65' font-family='Nunito,sans-serif' font-size='30' font-weight='900' fill='rgba(168,85,247,0.17)' transform='rotate(-5 80 65)'%3E%3F%3C/text%3E%3Cline x1='30' y1='100' x2='100' y2='100' stroke='rgba(168,85,247,0.2)' stroke-width='3' stroke-dasharray='8 5'/%3E%3Ccircle cx='30' cy='100' r='7' fill='rgba(168,85,247,0.2)'/%3E%3Ccircle cx='100' cy='100' r='7' fill='rgba(168,85,247,0.2)'/%3E%3Cline x1='130' y1='80' x2='200' y2='80' stroke='rgba(168,85,247,0.18)' stroke-width='3' stroke-dasharray='8 5'/%3E%3Ccircle cx='130' cy='80' r='7' fill='rgba(168,85,247,0.18)'/%3E%3Ccircle cx='200' cy='80' r='7' fill='rgba(168,85,247,0.18)'/%3E%3Cline x1='20' y1='155' x2='95' y2='155' stroke='rgba(168,85,247,0.2)' stroke-width='3' stroke-dasharray='8 5'/%3E%3Ccircle cx='20' cy='155' r='7' fill='rgba(168,85,247,0.2)'/%3E%3Ccircle cx='95' cy='155' r='7' fill='rgba(168,85,247,0.2)'/%3E%3Cline x1='120' y1='145' x2='195' y2='145' stroke='rgba(168,85,247,0.18)' stroke-width='3' stroke-dasharray='8 5'/%3E%3Ccircle cx='120' cy='145' r='6' fill='rgba(168,85,247,0.18)'/%3E%3Ccircle cx='195' cy='145' r='6' fill='rgba(168,85,247,0.18)'/%3E%3Ctext x='40' y='200' font-family='Nunito,sans-serif' font-size='26' font-weight='900' fill='rgba(168,85,247,0.16)' transform='rotate(10 40 200)'%3E%3F%3C/text%3E%3Ctext x='130' y='205' font-family='Nunito,sans-serif' font-size='17' font-weight='800' fill='rgba(168,85,247,0.15)' transform='rotate(-10 130 205)'%3ECLUE%3C/text%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 220px 220px;
+}
+
+/* ---- Card 5: Puzzles List ---- */
+.bento-puzzles {
+  border-color: rgba(45, 94, 69, 0.12);
+}
+.bento-puzzles:hover {
+  border-color: var(--color-forest-500);
+}
+.bento-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.bento-section-head h3 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--color-text-pri);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.bento-section-head h3 i {
+  color: var(--color-forest-600);
+}
+.bento-section-head .see-all {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-text-mut);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.bento-section-head .see-all:hover {
+  color: var(--color-forest-600);
+}
+
+/* Puzzle items inside bento */
+.bento-puzzle-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.bento-puzzle-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--color-bg-page);
+  border-bottom: 4px solid var(--color-border-light);
+  border-radius: 14px;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+.bento-puzzle-item:hover {
+  background: var(--color-bg-surface);
+  border-color: inherit;
+  transform: scale(1.02) translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+.bpi-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+.bpi-icon.green {
+  background: rgba(45, 94, 69, 0.1);
+  color: var(--color-forest-600);
+}
+.bpi-icon.blue {
+  background: var(--aqua-mist-light);
+  color: var(--aqua-mist-dark);
+}
+.bpi-icon.purple {
+  background: rgba(206, 130, 255, 0.1);
+  color: var(--purple);
+}
+.bpi-info {
+  flex-grow: 1;
+}
+.bpi-info strong {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--color-text-pri);
+  margin-bottom: 1px;
+}
+.bpi-info span {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-text-sec); /* Switched from mut to sec for better contrast */
+}
+.bpi-xp {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--color-forest-600);
+  background: rgba(45, 94, 69, 0.08);
+  padding: 3px 10px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.bpi-lock {
+  color: var(--color-border-light);
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+.bento-puzzle-item.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.bento-puzzle-item.locked:hover {
+  transform: none;
+  background: var(--color-bg-page);
+  border-color: var(--color-border-light);
+}
+
+/* ---- Card 6: Leaderboard + Quests ---- */
+.bento-stats {
+  border-color: rgba(255, 200, 0, 0.15);
+}
+.bento-stats:hover {
+  border-color: var(--yellow);
+}
+.bento-stats .bento-section-head h3 i {
+  color: var(--yellow);
+}
+.bento-stats .bento-section-head h3 .fa-bolt {
+  color: var(--yellow);
+}
+
+/* Stats & Quests Cards */
+.bento-stats-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.bento-lb-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  background: #FFFFFF;
+  border: 1px solid #D6CCBA;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+.bento-lb-row:hover {
+  transform: scale(1.01);
+  border-color: #D6CCBA;
+  background: #FFFDF7;
+}
+.lb-avatar {
+  width: 36px;
+  height: 36px;
+  background: var(--bg-surface);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  color: var(--text-tertiary);
+}
+.gold .lb-avatar { color: #ffb800; background: none; }
+.silver .lb-avatar { color: #7a8a94; background: none; }
+.bronze .lb-avatar { color: #b87333; background: none; }
+
+.lb-name {
+  flex: 1;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+.lb-score {
+  font-weight: 900;
+  color: var(--green-dark);
+  font-size: 1rem;
+}
+
+/* Quests */
+.quests-container {
+  background: var(--bg-surface);
+  padding: 20px;
+  border-radius: 20px;
+  margin-top: auto;
+}
+.quest-item {
+  margin-bottom: 16px;
+}
+.quest-item:last-child { margin-bottom: 0; }
+.quest-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.quest-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.quest-progress-text {
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: #2D5E45;
+}
+.quest-bar-outer {
+  height: 12px;
+  background: var(--bg-page);
+  border-radius: 10px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+.quest-bar-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.xp-gradient { background: #FFB800; }
+.puzzle-gradient { background: #2D5E45; }
+
+.amber-text { color: #ffb800; }
+.forest-text { color: #2d5e45; }
+
+/* ---- Grid placement ---- */
+.bento-daily {
+  grid-column: 1 / 3;
+  grid-row: 1;
+}
+.bento-level {
+  grid-column: 3 / 5;
+  grid-row: 1;
+}
+.bento-scramble {
+  grid-column: 1 / 2;
+  grid-row: 2;
+}
+.bento-match {
+  grid-column: 2 / 3;
+  grid-row: 2;
+}
+.bento-puzzles {
+  grid-column: 1 / 3;
+  grid-row: 3;
+}
+.bento-stats {
+  grid-column: 3 / 5;
+  grid-row: 2 / 4;
+}
+
+/* ---- Entrance Animations ---- */
+.bento-card {
+  animation: bentoFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.bento-daily {
+  animation-delay: 0.05s;
+}
+.bento-level {
+  animation-delay: 0.12s;
+}
+.bento-scramble {
+  animation-delay: 0.2s;
+}
+.bento-match {
+  animation-delay: 0.28s;
+}
+.bento-puzzles {
+  animation-delay: 0.35s;
+}
+.bento-stats {
+  animation-delay: 0.42s;
+}
+
+@keyframes bentoFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+  .bento-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .bento-daily {
+    grid-column: 1 / 3;
+    grid-row: 1;
+  }
+  .bento-level {
+    grid-column: 1 / 3;
+    grid-row: 2;
+  }
+  .bento-scramble {
+    grid-column: 1;
+    grid-row: 3;
+  }
+  .bento-match {
+    grid-column: 2;
+    grid-row: 3;
+  }
+  .bento-puzzles {
+    grid-column: 1 / 3;
+    grid-row: 4;
+  }
+  .bento-stats {
+    grid-column: 1 / 3;
+    grid-row: 5;
+  }
+}
+@media (max-width: 540px) {
+  .bento-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .bento-daily,
+  .bento-level,
+  .bento-scramble,
+  .bento-match,
+  .bento-puzzles,
+  .bento-stats {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .bento-card-inner {
+    padding: 20px 18px;
+  }
+  .bento-daily .daily-title {
+    font-size: 1.3rem;
+  }
+  .level-ring-wrap {
+    width: 110px;
+    height: 110px;
+  }
+  .level-num {
+    font-size: 2rem;
+  }
+}
+
+/* Home Layout Tweaks */
+.home-content {
+  max-width: 720px;
+}
+
+.see-all {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--green-dark);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.see-all:hover {
+  color: var(--green-dark);
+}
