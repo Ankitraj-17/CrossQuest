@@ -11,7 +11,7 @@
 <p align="center">
   <img alt="Tech: HTML" src="https://img.shields.io/badge/HTML5-Frontend-E34F26?logo=html5&logoColor=white" />
   <img alt="Tech: CSS" src="https://img.shields.io/badge/CSS3-Responsive-1572B6?logo=css3&logoColor=white" />
-  <img alt="Tech: JavaScript" src="https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=111" />
+  <img alt="Tech: JavaScript" src="https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?logo=javascript&logoColor=111" />
   <img alt="Status" src="https://img.shields.io/badge/Status-Ready_for_Demo-2D5E45" />
 </p>
 
@@ -20,8 +20,6 @@
 </p>
 
 ---
-## Deploy Link: https://ankitraj-17.github.io/CrossQuest/
-
 
 ## Quick Navigation
 
@@ -99,11 +97,22 @@ CrossQuest is a multi-page front-end case study that simulates a real puzzle pro
 ├── play.css              # Library styles
 ├── game.css              # Gameplay styles
 ├── create.css            # Creator styles
-├── forum.css             # Forum styles
-├── leaderboard.css       # Leaderboard styles
+├── community.css         # Shared forum + leaderboard styles
 ├── script.js             # Main app logic
 ├── game.js               # Game page helper logic
 └── logo.png              # Branding asset
+```
+
+## User Flow
+
+```mermaid
+flowchart LR
+  A[index.html\nLanding] --> B[home.html\nDashboard]
+  B --> C[play.html\nLibrary]
+  C --> D[game.html\nGameplay]
+  B --> E[create.html\nPuzzle Creator]
+  B --> F[forum.html\nCommunity]
+  B --> G[leaderboard.html\nLeaderboard]
 ```
 
 ## Page Breakdown
