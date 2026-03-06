@@ -20,6 +20,8 @@
 </p>
 
 ---
+## Deploy Link: https://ankitraj-17.github.io/CrossQuest/
+
 
 ## Quick Navigation
 
