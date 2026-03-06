@@ -104,18 +104,6 @@ CrossQuest is a multi-page front-end case study that simulates a real puzzle pro
 └── logo.png              # Branding asset
 ```
 
-## User Flow
-
-```mermaid
-flowchart LR
-  A[index.html\nLanding] --> B[home.html\nDashboard]
-  B --> C[play.html\nLibrary]
-  C --> D[game.html\nGameplay]
-  B --> E[create.html\nPuzzle Creator]
-  B --> F[forum.html\nCommunity]
-  B --> G[leaderboard.html\nLeaderboard]
-```
-
 ## Page Breakdown
 
 | Page | Purpose | Key Interactions |
