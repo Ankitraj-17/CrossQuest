@@ -71,6 +71,26 @@ function launchConfetti() {
     animate();
 }
 
+function createEl(tag, options = {}) {
+    const node = document.createElement(tag);
+    if (options.className) node.className = options.className;
+    if (options.text !== undefined) node.textContent = options.text;
+    if (options.attrs) {
+        Object.entries(options.attrs).forEach(([key, value]) => {
+            if (value !== undefined && value !== null) node.setAttribute(key, String(value));
+        });
+    }
+    return node;
+}
+
+function applyGridSizeClass(element, prefix, size) {
+    const classPrefix = `${prefix}-`;
+    Array.from(element.classList).forEach((cls) => {
+        if (cls.startsWith(classPrefix)) element.classList.remove(cls);
+    });
+    element.classList.add(`${classPrefix}${size}`);
+}
+
 // --- Data Structures ---
 
 const defaultPuzzleData = {
@@ -144,35 +164,40 @@ window.customConfirm = function(title, message, onConfirm) {
     if (!overlay) {
         overlay = document.createElement('div');
         overlay.id = 'custom-confirm-modal';
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.width = '100%';
-        overlay.style.height = '100%';
-        overlay.style.background = 'rgba(42, 27, 24, 0.4)';
-        overlay.style.backdropFilter = 'blur(12px)';
-        overlay.style.display = 'none';
-        overlay.style.alignItems = 'center';
-        overlay.style.justifyContent = 'center';
-        overlay.style.zIndex = '10000';
-        overlay.innerHTML = `
-            <div style="background: var(--bg-surface); padding: 40px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); max-width: 400px; width: 90%; text-align: center; box-shadow: var(--shadow-elevated);">
-                <i class="fa-solid fa-triangle-exclamation" style="font-size: 3rem; color: var(--accent-gold, #f59e0b); margin-bottom: 24px; filter: drop-shadow(0 4px 8px rgba(244, 162, 97, 0.3));"></i>
-                <h2 id="cc-title" style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.8rem; color: var(--text-primary); margin-bottom: 12px;"></h2>
-                <p id="cc-message" style="color: var(--text-secondary); margin-bottom: 32px; font-size: 1.05rem; line-height: 1.6;"></p>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                    <button class="btn btn-outline" id="cc-btn-cancel" style="width: 100%;">Cancel</button>
-                    <button class="btn btn-primary" id="cc-btn-confirm" style="width: 100%;">Confirm</button>
-                </div>
-            </div>
-        `;
+        overlay.className = 'cw-modal-overlay';
+        const card = createEl('div', { className: 'cw-dialog-card' });
+        const icon = createEl('i', {
+            className: 'fa-solid fa-triangle-exclamation cw-dialog-icon cw-dialog-icon-warning'
+        });
+        const heading = createEl('h2', {
+            attrs: { id: 'cc-title' },
+            className: 'cw-dialog-title'
+        });
+        const messageNode = createEl('p', {
+            attrs: { id: 'cc-message' },
+            className: 'cw-dialog-message'
+        });
+        const btnRow = createEl('div', { className: 'cw-dialog-actions' });
+        const cancelBtn = createEl('button', {
+            className: 'btn btn-outline',
+            text: 'Cancel',
+            attrs: { id: 'cc-btn-cancel' }
+        });
+        const confirmBtn = createEl('button', {
+            className: 'btn btn-primary',
+            text: 'Confirm',
+            attrs: { id: 'cc-btn-confirm' }
+        });
+        btnRow.append(cancelBtn, confirmBtn);
+        card.append(icon, heading, messageNode, btnRow);
+        overlay.replaceChildren(card);
         document.body.appendChild(overlay);
     }
     
     document.getElementById('cc-title').innerText = title;
     document.getElementById('cc-message').innerText = message;
     
-    overlay.style.display = 'flex';
+    overlay.classList.add('is-open');
     
     const btnCancel = document.getElementById('cc-btn-cancel');
     const btnConfirm = document.getElementById('cc-btn-confirm');
@@ -182,9 +207,9 @@ window.customConfirm = function(title, message, onConfirm) {
     btnCancel.parentNode.replaceChild(newCancel, btnCancel);
     btnConfirm.parentNode.replaceChild(newConfirm, btnConfirm);
     
-    newCancel.addEventListener('click', () => overlay.style.display = 'none');
+    newCancel.addEventListener('click', () => overlay.classList.remove('is-open'));
     newConfirm.addEventListener('click', () => {
-        overlay.style.display = 'none';
+        overlay.classList.remove('is-open');
         if (onConfirm) onConfirm();
     });
 };
@@ -194,25 +219,27 @@ window.customAlert = function(title, message, type = 'info') {
     if (!overlay) {
         overlay = document.createElement('div');
         overlay.id = 'custom-alert-modal';
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.width = '100%';
-        overlay.style.height = '100%';
-        overlay.style.background = 'rgba(42, 27, 24, 0.4)';
-        overlay.style.backdropFilter = 'blur(12px)';
-        overlay.style.display = 'none';
-        overlay.style.alignItems = 'center';
-        overlay.style.justifyContent = 'center';
-        overlay.style.zIndex = '10000';
-        overlay.innerHTML = `
-            <div style="background: var(--bg-surface); padding: 40px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); max-width: 400px; width: 90%; text-align: center; box-shadow: var(--shadow-elevated);">
-                <i id="ca-icon" class="fa-solid fa-circle-info" style="font-size: 3rem; margin-bottom: 24px;"></i>
-                <h2 id="ca-title" style="font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--text-primary); margin-bottom: 12px;"></h2>
-                <p id="ca-message" style="color: var(--text-secondary); margin-bottom: 32px; font-size: 1.05rem; line-height: 1.6;"></p>
-                <button class="btn btn-primary" id="ca-btn-ok" style="width: 100%;">OK</button>
-            </div>
-        `;
+        overlay.className = 'cw-modal-overlay';
+        const card = createEl('div', { className: 'cw-dialog-card' });
+        const icon = createEl('i', {
+            attrs: { id: 'ca-icon' },
+            className: 'fa-solid fa-circle-info cw-dialog-icon cw-dialog-icon-info'
+        });
+        const heading = createEl('h2', {
+            attrs: { id: 'ca-title' },
+            className: 'cw-dialog-title'
+        });
+        const body = createEl('p', {
+            attrs: { id: 'ca-message' },
+            className: 'cw-dialog-message'
+        });
+        const okBtn = createEl('button', {
+            className: 'btn btn-primary',
+            text: 'OK',
+            attrs: { id: 'ca-btn-ok' }
+        });
+        card.append(icon, heading, body, okBtn);
+        overlay.replaceChildren(card);
         document.body.appendChild(overlay);
     }
     
@@ -220,31 +247,28 @@ window.customAlert = function(title, message, type = 'info') {
     document.getElementById('ca-message').innerText = message;
     
     const icon = document.getElementById('ca-icon');
+    icon.classList.remove('cw-dialog-icon-error', 'cw-dialog-icon-success', 'cw-dialog-icon-warning', 'cw-dialog-icon-info');
     if (type === 'error') {
         icon.className = 'fa-solid fa-circle-xmark';
-        icon.style.color = 'var(--error)';
-        icon.style.filter = 'drop-shadow(0 4px 8px rgba(224, 122, 95, 0.3))';
+        icon.classList.add('cw-dialog-icon', 'cw-dialog-icon-error');
     } else if (type === 'success') {
         icon.className = 'fa-solid fa-circle-check';
-        icon.style.color = 'var(--success)';
-        icon.style.filter = 'drop-shadow(0 4px 8px rgba(129, 178, 154, 0.3))';
+        icon.classList.add('cw-dialog-icon', 'cw-dialog-icon-success');
     } else if (type === 'warning') {
         icon.className = 'fa-solid fa-triangle-exclamation';
-        icon.style.color = 'var(--accent-gold)';
-        icon.style.filter = 'drop-shadow(0 4px 8px rgba(244, 162, 97, 0.3))';
+        icon.classList.add('cw-dialog-icon', 'cw-dialog-icon-warning');
     } else {
         icon.className = 'fa-solid fa-circle-info';
-        icon.style.color = 'var(--accent-primary)';
-        icon.style.filter = 'drop-shadow(0 4px 8px rgba(224, 122, 95, 0.3))';
+        icon.classList.add('cw-dialog-icon', 'cw-dialog-icon-info');
     }
     
-    overlay.style.display = 'flex';
+    overlay.classList.add('is-open');
     
     const btnOk = document.getElementById('ca-btn-ok');
     const newOk = btnOk.cloneNode(true);
     btnOk.parentNode.replaceChild(newOk, btnOk);
     
-    newOk.addEventListener('click', () => overlay.style.display = 'none');
+    newOk.addEventListener('click', () => overlay.classList.remove('is-open'));
 };
 
 window.showPremiumModal = function() {
@@ -252,88 +276,117 @@ window.showPremiumModal = function() {
     if (!overlay) {
         overlay = document.createElement('div');
         overlay.id = 'premium-modal';
-        overlay.className = 'modal-overlay';
-        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);backdrop-filter:blur(8px);display:none;align-items:flex-start;justify-content:center;z-index:10000;overflow-y:auto;padding:40px 20px;';
-        
-        overlay.innerHTML = `
-            <div class="card prem-modal-card animate-slide-up" style="max-width: 900px; width: 100%; position: relative; padding: 0; background: var(--bg-page); margin-bottom: 40px;">
-                <button id="close-premium" style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.5rem; color: var(--text-tertiary); cursor: pointer; z-index: 10;"><i class="fa-solid fa-xmark"></i></button>
-                
-                <div style="padding: 40px;">
-                    <div class="prem-header" style="text-align: center; margin-bottom: 32px; border-bottom: 2px solid var(--border-color); padding-bottom: 20px;">
-                        <h1 style="font-size: 2.2rem; font-weight: 900; color: var(--text-primary);"><i class="fa-solid fa-crown" style="color: #FFC800; margin-right: 12px;"></i> Go Premium</h1>
-                        <p style="color: var(--text-secondary); font-weight: 600;">Choose the perfect plan for your crossword journey</p>
-                    </div>
+        overlay.className = 'modal-overlay premium-overlay';
 
-                    <div class="prem-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; align-items: stretch; margin-bottom: 40px;">
-                        <!-- Free -->
-                        <div class="prem-card">
-                            <div class="prem-card-icon prem-icon-bg-gray"><i class="fa-solid fa-seedling"></i></div>
-                            <h3 class="prem-plan-name">Free</h3>
-                            <div class="prem-price"><span class="prem-amount">$0</span></div>
-                            <p class="prem-desc">Get started for free</p>
-                            <ul class="prem-list">
-                                <li><i class="fa-solid fa-check"></i> 5 puzzles per day</li>
-                                <li><i class="fa-solid fa-check"></i> Standard leaderboard</li>
-                                <li><i class="fa-solid fa-check"></i> Basic creation tools</li>
-                                <li><i class="fa-solid fa-check"></i> Community forum</li>
-                            </ul>
-                            <button id="prem-btn-free" class="btn btn-outline w-100" style="margin-top: auto;">Current Plan</button>
-                        </div>
+        const modalCard = createEl('div', { className: 'card prem-modal-card animate-slide-up premium-modal-card' });
+        const closeBtn = createEl('button', { attrs: { id: 'close-premium', type: 'button' }, className: 'premium-close-btn' });
+        closeBtn.appendChild(createEl('i', { className: 'fa-solid fa-xmark' }));
 
-                        <!-- Pro -->
-                        <div class="prem-card prem-card-pro" style="transform: scale(1.05); z-index: 2; box-shadow: 0 20px 50px rgba(45, 94, 69, 0.3);">
-                            <div class="prem-popular-tag">⭐ MOST POPULAR</div>
-                            <div class="prem-card-icon prem-icon-bg-white"><i class="fa-solid fa-crown"></i></div>
-                            <h3 class="prem-plan-name prem-text-white">Pro</h3>
-                            <div class="prem-price"><span class="prem-amount prem-text-white">$9.99</span><span class="prem-period prem-text-muted">/mo</span></div>
-                            <p class="prem-desc prem-desc-muted">Unlimited everything</p>
-                            <ul class="prem-list">
-                                <li style="color: white;"><i class="fa-solid fa-check" style="color: #A0E870;"></i> <strong>Unlimited</strong> puzzles</li>
-                                <li style="color: white;"><i class="fa-solid fa-check" style="color: #A0E870;"></i> Advanced creation tools</li>
-                                <li style="color: white;"><i class="fa-solid fa-check" style="color: #A0E870;"></i> <strong>10x</strong> XP boost</li>
-                                <li style="color: white;"><i class="fa-solid fa-check" style="color: #A0E870;"></i> Ad-free experience</li>
-                            </ul>
-                            <button id="prem-btn-pro" class="btn w-100 btn-lg prem-pro-btn" style="background:#fff; color:var(--green); margin-top: auto;">Get Pro Now</button>
-                        </div>
+        const content = createEl('div', { className: 'premium-content' });
+        const header = createEl('div', { className: 'prem-header premium-header' });
+        const title = createEl('h1', { className: 'premium-title' });
+        title.append(createEl('i', { className: 'fa-solid fa-crown premium-title-icon' }), document.createTextNode(' Go Premium'));
+        const subtitle = createEl('p', { className: 'premium-subtitle', text: 'Choose the perfect plan for your crossword journey' });
+        header.append(title, subtitle);
 
-                        <!-- Team -->
-                        <div class="prem-card">
-                            <div class="prem-card-icon prem-icon-bg-blue" style="background: #E0F2FE; color: #1CB0F6;"><i class="fa-solid fa-users"></i></div>
-                            <h3 class="prem-plan-name">Team</h3>
-                            <div class="prem-price"><span class="prem-amount">$29.99</span><span class="prem-period">/mo</span></div>
-                            <p class="prem-desc">For groups & classrooms</p>
-                            <ul class="prem-list">
-                                <li><i class="fa-solid fa-check"></i> Everything in Pro</li>
-                                <li><i class="fa-solid fa-check"></i> Team puzzles</li>
-                                <li><i class="fa-solid fa-check"></i> Private leaderboards</li>
-                                <li><i class="fa-solid fa-check"></i> Admin dashboard</li>
-                            </ul>
-                            <button id="prem-btn-team" class="btn btn-blue w-100" style="margin-top: auto;">Contact Sales</button>
-                        </div>
-                    </div>
+        const cards = createEl('div', { className: 'prem-cards premium-cards' });
 
-                    <!-- FAQ -->
-                    <div class="premium-faq">
-                        <h2 style="font-size: 1.4rem; font-weight: 900; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;"><i class="fa-solid fa-circle-question" style="color: #1CB0F6;"></i> Common Questions</h2>
-                        <div class="faq-accordion">
-                            <div class="faq-item" onclick="this.classList.toggle('open')">
-                                <div class="faq-q"><span>Can I cancel anytime?</span><i class="fa-solid fa-chevron-down"></i></div>
-                                <div class="faq-a">Yes! You can cancel your subscription at any time. Your Pro features will remain active until the end of your billing period.</div>
-                            </div>
-                            <div class="faq-item" onclick="this.classList.toggle('open')">
-                                <div class="faq-q"><span>Do I keep my progress?</span><i class="fa-solid fa-chevron-down"></i></div>
-                                <div class="faq-a">Absolutely. Your XP, streak, and all puzzle progress are saved forever regardless of your plan.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
+        const createFeature = (text, iconClass = 'fa-solid fa-check', extraClass = '') => {
+            const li = createEl('li', { className: extraClass });
+            li.append(createEl('i', { className: iconClass }), document.createTextNode(` ${text}`));
+            return li;
+        };
+
+        const freeCard = createEl('div', { className: 'prem-card' });
+        freeCard.append(
+            createEl('div', { className: 'prem-card-icon prem-icon-bg-gray' }),
+            createEl('h3', { className: 'prem-plan-name', text: 'Free' }),
+            (() => { const p = createEl('div', { className: 'prem-price' }); p.appendChild(createEl('span', { className: 'prem-amount', text: '$0' })); return p; })(),
+            createEl('p', { className: 'prem-desc', text: 'Get started for free' })
+        );
+        freeCard.querySelector('.prem-card-icon').appendChild(createEl('i', { className: 'fa-solid fa-seedling' }));
+        const freeList = createEl('ul', { className: 'prem-list' });
+        freeList.append(
+            createFeature('5 puzzles per day'),
+            createFeature('Standard leaderboard'),
+            createFeature('Basic creation tools'),
+            createFeature('Community forum')
+        );
+        const freeBtn = createEl('button', { attrs: { id: 'prem-btn-free', type: 'button' }, className: 'btn btn-outline premium-btn-full premium-btn-bottom', text: 'Current Plan' });
+        freeCard.append(freeList, freeBtn);
+
+        const proCard = createEl('div', { className: 'prem-card prem-card-pro premium-card-pro' });
+        proCard.append(
+            createEl('div', { className: 'prem-popular-tag', text: 'MOST POPULAR' }),
+            createEl('div', { className: 'prem-card-icon prem-icon-bg-white' }),
+            createEl('h3', { className: 'prem-plan-name prem-text-white', text: 'Pro' })
+        );
+        proCard.querySelector('.prem-card-icon').appendChild(createEl('i', { className: 'fa-solid fa-crown' }));
+        const proPrice = createEl('div', { className: 'prem-price' });
+        proPrice.append(
+            createEl('span', { className: 'prem-amount prem-text-white', text: '$9.99' }),
+            createEl('span', { className: 'prem-period prem-text-muted', text: '/mo' })
+        );
+        const proDesc = createEl('p', { className: 'prem-desc prem-desc-muted', text: 'Unlimited everything' });
+        const proList = createEl('ul', { className: 'prem-list prem-list-pro' });
+        proList.append(
+            createFeature('Unlimited puzzles', 'fa-solid fa-check', 'prem-list-pro-item'),
+            createFeature('Advanced creation tools', 'fa-solid fa-check', 'prem-list-pro-item'),
+            createFeature('10x XP boost', 'fa-solid fa-check', 'prem-list-pro-item'),
+            createFeature('Ad-free experience', 'fa-solid fa-check', 'prem-list-pro-item')
+        );
+        const proBtn = createEl('button', { attrs: { id: 'prem-btn-pro', type: 'button' }, className: 'btn premium-btn-full premium-btn-bottom prem-pro-btn', text: 'Get Pro Now' });
+        proCard.append(proPrice, proDesc, proList, proBtn);
+
+        const teamCard = createEl('div', { className: 'prem-card' });
+        teamCard.append(
+            createEl('div', { className: 'prem-card-icon prem-icon-bg-blue' }),
+            createEl('h3', { className: 'prem-plan-name', text: 'Team' })
+        );
+        teamCard.querySelector('.prem-card-icon').appendChild(createEl('i', { className: 'fa-solid fa-users' }));
+        const teamPrice = createEl('div', { className: 'prem-price' });
+        teamPrice.append(
+            createEl('span', { className: 'prem-amount', text: '$29.99' }),
+            createEl('span', { className: 'prem-period', text: '/mo' })
+        );
+        const teamDesc = createEl('p', { className: 'prem-desc', text: 'For groups & classrooms' });
+        const teamList = createEl('ul', { className: 'prem-list' });
+        teamList.append(
+            createFeature('Everything in Pro'),
+            createFeature('Team puzzles'),
+            createFeature('Private leaderboards'),
+            createFeature('Admin dashboard')
+        );
+        const teamBtn = createEl('button', { attrs: { id: 'prem-btn-team', type: 'button' }, className: 'btn btn-blue premium-btn-full premium-btn-bottom', text: 'Contact Sales' });
+        teamCard.append(teamPrice, teamDesc, teamList, teamBtn);
+
+        cards.append(freeCard, proCard, teamCard);
+
+        const faq = createEl('div', { className: 'premium-faq' });
+        const faqTitle = createEl('h2', { className: 'premium-faq-title' });
+        faqTitle.append(createEl('i', { className: 'fa-solid fa-circle-question' }), document.createTextNode(' Common Questions'));
+        const accordion = createEl('div', { className: 'faq-accordion' });
+        const makeFaqItem = (q, a) => {
+            const item = createEl('div', { className: 'faq-item' });
+            const qWrap = createEl('div', { className: 'faq-q' });
+            qWrap.append(createEl('span', { text: q }), createEl('i', { className: 'fa-solid fa-chevron-down' }));
+            const aWrap = createEl('div', { className: 'faq-a', text: a });
+            item.append(qWrap, aWrap);
+            item.addEventListener('click', () => item.classList.toggle('open'));
+            return item;
+        };
+        accordion.append(
+            makeFaqItem('Can I cancel anytime?', 'Yes! You can cancel your subscription at any time. Your Pro features will remain active until the end of your billing period.'),
+            makeFaqItem('Do I keep my progress?', 'Absolutely. Your XP, streak, and all puzzle progress are saved forever regardless of your plan.')
+        );
+        faq.append(faqTitle, accordion);
+
+        content.append(header, cards, faq);
+        modalCard.append(closeBtn, content);
+        overlay.replaceChildren(modalCard);
         document.body.appendChild(overlay);
         document.getElementById('close-premium').addEventListener('click', () => {
             overlay.classList.remove('active');
-            setTimeout(() => overlay.style.display = 'none', 300);
         });
 
         // Add Listeners
@@ -349,7 +402,6 @@ window.showPremiumModal = function() {
             window.customAlert('Request Sent', 'Our sales team has been notified. We will contact you via email within 24 hours.', 'success');
         });
     }
-    overlay.style.display = 'flex';
     setTimeout(() => overlay.classList.add('active'), 10);
 };
 
@@ -358,88 +410,92 @@ window.showPaymentModal = function() {
     if (!overlay) {
         overlay = document.createElement('div');
         overlay.id = 'payment-modal';
-        overlay.className = 'modal-overlay';
-        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;z-index:20000;padding:20px;';
-        
-        overlay.innerHTML = `
-            <div class="card animate-slide-up" style="max-width: 480px; width: 100%; padding: 40px; background: #FFFDF9; border-radius: 28px; border: 3px solid #D6CCBA; border-bottom: 8px solid #1B3A2D; position: relative;">
-                <button id="close-payment" style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.5rem; color: #7A9486; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
-                
-                <div style="text-align: center; margin-bottom: 32px;">
-                    <div style="width: 60px; height: 60px; background: rgba(160, 232, 112, 0.15); color: #2D5E45; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 16px;">
-                        <i class="fa-solid fa-credit-card"></i>
-                    </div>
-                    <h2 style="font-size: 1.8rem; font-weight: 900; color: #1B3A2D; margin-bottom: 8px;">Payment Details</h2>
-                    <p style="color: #3E5E4E; font-weight: 600; font-size: 0.95rem;">Complete your upgrade to CrossQuest Pro</p>
-                </div>
+        overlay.className = 'modal-overlay payment-overlay';
 
-                <div style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 32px;">
-                    <div>
-                        <label style="display: block; font-size: 0.75rem; font-weight: 800; color: #7A9486; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; margin-left: 4px;">Cardholder Name</label>
-                        <input type="text" placeholder="John Doe" class="input-field" style="background: #FFF; border-color: #D6CCBA; font-weight: 700;">
-                    </div>
-                    <div>
-                        <label style="display: block; font-size: 0.75rem; font-weight: 800; color: #7A9486; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; margin-left: 4px;">Card Number</label>
-                        <div style="position: relative;">
-                            <input type="text" placeholder="0000 0000 0000 0000" class="input-field" style="background: #FFF; border-color: #D6CCBA; font-weight: 700; padding-left: 45px;">
-                            <i class="fa-solid fa-credit-card" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #D6CCBA;"></i>
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 16px;">
-                        <div style="flex: 1;">
-                            <label style="display: block; font-size: 0.75rem; font-weight: 800; color: #7A9486; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; margin-left: 4px;">Expiry Date</label>
-                            <input type="text" placeholder="MM / YY" class="input-field" style="background: #FFF; border-color: #D6CCBA; font-weight: 700; text-align: center;">
-                        </div>
-                        <div style="flex: 1;">
-                            <label style="display: block; font-size: 0.75rem; font-weight: 800; color: #7A9486; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; margin-left: 4px;">CVC</label>
-                            <input type="text" placeholder="123" class="input-field" style="background: #FFF; border-color: #D6CCBA; font-weight: 700; text-align: center;">
-                        </div>
-                    </div>
-                </div>
+        const card = createEl('div', { className: 'card animate-slide-up payment-card' });
+        const closeBtn = createEl('button', { attrs: { id: 'close-payment', type: 'button' }, className: 'payment-close-btn' });
+        closeBtn.appendChild(createEl('i', { className: 'fa-solid fa-xmark' }));
 
-                <div style="display: flex; flex-direction: column; gap: 12px;">
-                    <button id="confirm-payment" class="btn btn-green btn-lg" style="width: 100%; border-bottom-width: 6px;">
-                        <i class="fa-solid fa-lock"></i> PAY $9.99 & START PRO
-                    </button>
-                    <button id="back-to-plans" style="background: none; border: none; color: #7A9486; font-weight: 800; font-size: 0.85rem; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; margin-top: 8px;">
-                        <i class="fa-solid fa-arrow-left"></i> Back to Plans
-                    </button>
-                </div>
-            </div>
-        `;
+        const header = createEl('div', { className: 'payment-header' });
+        const iconWrap = createEl('div', { className: 'payment-icon-wrap' });
+        iconWrap.appendChild(createEl('i', { className: 'fa-solid fa-credit-card' }));
+        header.append(
+            iconWrap,
+            createEl('h2', { className: 'payment-title', text: 'Payment Details' }),
+            createEl('p', { className: 'payment-subtitle', text: 'Complete your upgrade to CrossQuest Pro' })
+        );
+
+        const fields = createEl('div', { className: 'payment-fields' });
+        const makeField = (label, placeholder, extraClass = '') => {
+            const wrap = createEl('div', { className: extraClass });
+            wrap.append(
+                createEl('label', { className: 'payment-label', text: label }),
+                createEl('input', { className: 'input-field payment-input', attrs: { type: 'text', placeholder } })
+            );
+            return wrap;
+        };
+
+        fields.append(
+            makeField('Cardholder Name', 'John Doe'),
+            (() => {
+                const wrap = createEl('div');
+                wrap.appendChild(createEl('label', { className: 'payment-label', text: 'Card Number' }));
+                const cardNumWrap = createEl('div', { className: 'payment-card-number-wrap' });
+                cardNumWrap.append(
+                    createEl('input', { className: 'input-field payment-input payment-input-card-number', attrs: { type: 'text', placeholder: '0000 0000 0000 0000' } }),
+                    createEl('i', { className: 'fa-solid fa-credit-card payment-card-number-icon' })
+                );
+                wrap.appendChild(cardNumWrap);
+                return wrap;
+            })(),
+            (() => {
+                const row = createEl('div', { className: 'payment-two-col' });
+                row.append(
+                    makeField('Expiry Date', 'MM / YY', 'payment-col'),
+                    makeField('CVC', '123', 'payment-col')
+                );
+                return row;
+            })()
+        );
+
+        const actions = createEl('div', { className: 'payment-actions' });
+        const confirmBtn = createEl('button', { attrs: { id: 'confirm-payment', type: 'button' }, className: 'btn btn-green payment-confirm-btn', text: 'PAY $9.99 & START PRO' });
+        confirmBtn.prepend(createEl('i', { className: 'fa-solid fa-lock' }), document.createTextNode(' '));
+        const backBtn = createEl('button', { attrs: { id: 'back-to-plans', type: 'button' }, className: 'payment-back-btn', text: 'Back to Plans' });
+        backBtn.prepend(createEl('i', { className: 'fa-solid fa-arrow-left' }), document.createTextNode(' '));
+        actions.append(confirmBtn, backBtn);
+
+        card.append(closeBtn, header, fields, actions);
+        overlay.replaceChildren(card);
         document.body.appendChild(overlay);
 
         document.getElementById('close-payment').addEventListener('click', () => {
             overlay.classList.remove('active');
-            setTimeout(() => overlay.style.display = 'none', 300);
         });
 
         document.getElementById('back-to-plans').addEventListener('click', () => {
             overlay.classList.remove('active');
             setTimeout(() => {
-                overlay.style.display = 'none';
                 window.showPremiumModal();
             }, 300);
         });
 
         document.getElementById('confirm-payment').addEventListener('click', () => {
             const btn = document.getElementById('confirm-payment');
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> PROCESSING...';
-            btn.style.opacity = '0.8';
-            btn.style.pointerEvents = 'none';
+            const loadingIcon = document.createElement('i');
+            loadingIcon.className = 'fa-solid fa-circle-notch fa-spin';
+            btn.replaceChildren(loadingIcon, document.createTextNode(' PROCESSING...'));
+            btn.classList.add('is-loading');
             
             setTimeout(() => {
                 overlay.classList.remove('active');
                 setTimeout(() => {
-                    overlay.style.display = 'none';
                     document.getElementById('premium-modal').classList.remove('active');
-                    setTimeout(() => document.getElementById('premium-modal').style.display = 'none', 300);
                     window.customAlert('Success!', 'Welcome to CrossQuest Pro! Your unlimited access starts now.', 'success');
                 }, 300);
             }, 2000);
         });
     }
-    overlay.style.display = 'flex';
     setTimeout(() => overlay.classList.add('active'), 10);
 };
 
@@ -471,19 +527,38 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!overlay) {
             overlay = document.createElement('div');
             overlay.id = 'custom-prompt-modal';
-            overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(42,27,24,0.4);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;z-index:9999;';
-            overlay.innerHTML = `
-                <div style="background: var(--bg-surface); padding: 40px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); max-width: 420px; width: 90%; text-align: center; box-shadow: var(--shadow-elevated); animation: fadeIn 0.3s ease-out;">
-                    <i class="fa-solid fa-user-pen" style="font-size: 3rem; margin-bottom: 24px; color: var(--accent-primary); filter: drop-shadow(0 4px 8px rgba(240,113,103,0.3));"></i>
-                    <h2 id="cp-title" style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.8rem; color: var(--text-primary); margin-bottom: 8px;"></h2>
-                    <p id="cp-message" style="color: var(--text-secondary); margin-bottom: 24px; font-size: 1rem; line-height: 1.5;"></p>
-                    <input type="text" id="cp-input" class="input-field" style="width: 100%; margin-bottom: 24px; font-size: 1.1rem; padding: 12px 16px; text-align: center; font-weight: 600; border: 1px solid var(--border-color); border-radius: var(--radius-sm);" />
-                    <div style="display: flex; gap: 12px;">
-                        <button class="btn btn-outline" id="cp-btn-cancel" style="flex: 1;">Cancel</button>
-                        <button class="btn btn-primary" id="cp-btn-ok" style="flex: 1;">Save Name</button>
-                    </div>
-                </div>
-            `;
+            overlay.className = 'cw-modal-overlay';
+            const card = createEl('div', { className: 'cw-dialog-card cw-dialog-card-prompt' });
+            const icon = createEl('i', {
+                className: 'fa-solid fa-user-pen cw-dialog-icon cw-dialog-icon-info'
+            });
+            const heading = createEl('h2', {
+                attrs: { id: 'cp-title' },
+                className: 'cw-dialog-title cw-dialog-title-prompt'
+            });
+            const body = createEl('p', {
+                attrs: { id: 'cp-message' },
+                className: 'cw-dialog-message cw-dialog-message-prompt'
+            });
+            const input = createEl('input', {
+                className: 'input-field',
+                attrs: { id: 'cp-input', type: 'text' }
+            });
+            input.classList.add('cw-dialog-input');
+            const actions = createEl('div', { className: 'cw-dialog-actions cw-dialog-actions-prompt' });
+            const cancel = createEl('button', {
+                className: 'btn btn-outline',
+                text: 'Cancel',
+                attrs: { id: 'cp-btn-cancel' }
+            });
+            const save = createEl('button', {
+                className: 'btn btn-primary',
+                text: 'Save Name',
+                attrs: { id: 'cp-btn-ok' }
+            });
+            actions.append(cancel, save);
+            card.append(icon, heading, body, input, actions);
+            overlay.replaceChildren(card);
             document.body.appendChild(overlay);
         }
 
@@ -492,7 +567,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const input = document.getElementById('cp-input');
         input.value = defaultValue || '';
 
-        overlay.style.display = 'flex';
+        overlay.classList.add('is-open');
         setTimeout(() => input.focus(), 100);
 
         const btnOk = document.getElementById('cp-btn-ok');
@@ -502,7 +577,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnOk.replaceWith(newOk);
         btnCancel.replaceWith(newCancel);
 
-        const close = () => { overlay.style.display = 'none'; };
+        const close = () => { overlay.classList.remove('is-open'); };
 
         newOk.addEventListener('click', () => {
             const val = input.value.trim();
@@ -517,18 +592,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    function getAvatarColor(name) {
-        const colors = [
-            'linear-gradient(135deg, #58CC02, #46A302)', // Green
-            'linear-gradient(135deg, #1CB0F6, #1899D6)', // Blue
-            'linear-gradient(135deg, #FF9600, #E08600)', // Orange
-            'linear-gradient(135deg, #FF4B4B, #EA2B2B)', // Red
-            'linear-gradient(135deg, #CE82FF, #B366E2)', // Purple
-            'linear-gradient(135deg, #FFC800, #D4B200)'  // Gold
+    function getAvatarClass(name) {
+        const classes = [
+            'avatar-grad-green',
+            'avatar-grad-blue',
+            'avatar-grad-orange',
+            'avatar-grad-red',
+            'avatar-grad-purple',
+            'avatar-grad-gold'
         ];
         let hash = 0;
         for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
-        return colors[Math.abs(hash) % colors.length];
+        return classes[Math.abs(hash) % classes.length];
     }
 
     document.querySelectorAll('.user-profile').forEach(el => {
@@ -537,10 +612,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (nameSpan) nameSpan.innerText = localProfile;
         if (avatarSpan) {
             avatarSpan.innerText = localProfile.charAt(0).toUpperCase();
-            avatarSpan.style.background = getAvatarColor(localProfile);
+            avatarSpan.classList.remove('avatar-grad-green', 'avatar-grad-blue', 'avatar-grad-orange', 'avatar-grad-red', 'avatar-grad-purple', 'avatar-grad-gold');
+            avatarSpan.classList.add(getAvatarClass(localProfile));
         }
         
-        el.style.cursor = 'pointer';
+        el.classList.add('is-clickable');
         el.title = 'Click to edit your Scholar Name';
         el.addEventListener('click', () => {
             window.customPrompt(
@@ -569,7 +645,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.querySelectorAll('.card-pro, .bento-mini.bento-scramble, .bento-mini.bento-match, .bento-puzzle-item.locked').forEach(el => {
-        el.style.cursor = 'pointer';
+        el.classList.add('is-clickable');
         el.addEventListener('click', (e) => {
             e.stopPropagation();
             window.showPremiumModal();
@@ -578,7 +654,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Library Page Launch Logic ---
     document.querySelectorAll('.challenge-card:not(.card-pro)').forEach(card => {
-        card.style.cursor = 'pointer';
+        card.classList.add('is-clickable');
         card.addEventListener('click', () => {
             const topicId = card.getAttribute('data-play-id');
             if (topicId && window.playBuiltIn) {
@@ -589,47 +665,59 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const customList = document.getElementById('custom-puzzle-list');
     if (customList) {
-        const createCardHTML = `
-            <div class="creator-card create-new">
-               <div class="cc-icon">+</div>
-               <div class="cc-info">
-                 <h4>Create New</h4>
-                 <p>Design your own challenge</p>
-               </div>
-            </div>
-        `;
-
         let savedPuzzles = JSON.parse(localStorage.getItem('cw_custom_puzzles') || '[]');
-        
-        let cardsHTML = '';
+
+        customList.replaceChildren();
+        const createCard = createEl('div', { className: 'creator-card create-new' });
+        const createIcon = createEl('div', { className: 'cc-icon', text: '+' });
+        const createInfo = createEl('div', { className: 'cc-info' });
+        createInfo.append(createEl('h4', { text: 'Create New' }), createEl('p', { text: 'Design your own challenge' }));
+        createCard.append(createIcon, createInfo);
+        customList.appendChild(createCard);
+
         savedPuzzles.forEach(puzzle => {
-            let dateStr = "Unknown Date";
+            let dateStr = 'Unknown Date';
             if (puzzle.createdAt) {
                 const d = new Date(puzzle.createdAt);
                 dateStr = d.toLocaleDateString();
             }
-            
-            cardsHTML += `
-            <div class="creator-card">
-               <div class="cc-badge">${puzzle.size}x</div>
-               <div class="cc-info">
-                 <h4>${puzzle.title}</h4>
-                 <div class="cc-meta">
-                     <span><i class="fa-solid fa-user" style="font-size: 0.7rem; margin-right: 4px;"></i> Created by You</span>
-                     <span>${dateStr}</span>
-                 </div>
-                 <div class="cc-actions">
-                     <button class="btn-cs-del" data-id="${puzzle.id}"><i class="fa-solid fa-trash"></i> Discard</button>
-                     <i class="fa-regular fa-clock" style="color: #64748B; font-size: 0.9rem;"></i>
-                 </div>
-                 <div style="font-size: 0.8rem; color: #64748B; margin-top: 4px; font-weight: 600;">Custom</div>
-               </div>
-               <button class="btn-cs-play" data-id="${puzzle.id}"><i class="fa-solid fa-play"></i></button>
-            </div>
-            `;
+
+            const card = createEl('div', { className: 'creator-card' });
+            const badge = createEl('div', { className: 'cc-badge', text: `${puzzle.size}x` });
+            const info = createEl('div', { className: 'cc-info' });
+
+            const title = createEl('h4', { text: puzzle.title });
+            const meta = createEl('div', { className: 'cc-meta' });
+
+            const byYou = createEl('span');
+            const userIcon = createEl('i', { className: 'fa-solid fa-user cc-meta-user-icon' });
+            byYou.append(userIcon, document.createTextNode(' Created by You'));
+
+            meta.append(byYou, createEl('span', { text: dateStr }));
+
+            const actions = createEl('div', { className: 'cc-actions' });
+            const deleteBtn = createEl('button', {
+                className: 'btn-cs-del',
+                attrs: { 'data-id': puzzle.id }
+            });
+            deleteBtn.append(createEl('i', { className: 'fa-solid fa-trash' }), document.createTextNode(' Discard'));
+
+            const clockIcon = createEl('i', { className: 'fa-regular fa-clock cc-clock-icon' });
+            actions.append(deleteBtn, clockIcon);
+
+            const customLabel = createEl('div', { className: 'cc-custom-label', text: 'Custom' });
+
+            info.append(title, meta, actions, customLabel);
+
+            const playBtn = createEl('button', {
+                className: 'btn-cs-play',
+                attrs: { 'data-id': puzzle.id }
+            });
+            playBtn.appendChild(createEl('i', { className: 'fa-solid fa-play' }));
+
+            card.append(badge, info, playBtn);
+            customList.appendChild(card);
         });
-        
-        customList.innerHTML = createCardHTML + cardsHTML;
         
         customList.addEventListener('click', (e) => {
             if (e.target.closest('.create-new')) {
@@ -676,7 +764,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 if (input) {
                                     input.value = cell.answerChar;
                                     cell.userInput = cell.answerChar;
-                                    input.style.color = 'var(--success)';
+                                    input.classList.remove('input-error');
+                                    input.classList.add('input-success');
                                 }
                             }
                         }
@@ -763,7 +852,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             const input = cellDiv.querySelector('input');
                             if (input) {
                                 input.value = '';
-                                input.style.display = 'none';
+                                input.classList.add('cell-input-hidden');
                             }
                         }
                     }
@@ -815,11 +904,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (cell) {
                             const numSpan = document.createElement('span');
                             numSpan.className = 'cw-number';
-                            numSpan.style.position = 'absolute';
-                            numSpan.style.top = '2px';
-                            numSpan.style.left = '4px';
-                            numSpan.style.fontSize = '0.7rem';
-                            numSpan.style.color = 'var(--text-secondary)';
                             numSpan.innerText = wordNumber;
                             cell.appendChild(numSpan);
                         }
@@ -831,38 +915,41 @@ document.addEventListener('DOMContentLoaded', () => {
             creatorWords = detectedWords;
             const container = document.getElementById('creator-clues-container');
             if(!container) return;
-            container.innerHTML = '';
+            container.replaceChildren();
             
             if (creatorWords.length === 0) {
-                container.innerHTML = '<div class="empty-clues-state">Add white cells and letters to detect words.</div>';
+                const emptyState = document.createElement('div');
+                emptyState.className = 'empty-clues-state';
+                emptyState.textContent = 'Add white cells and letters to detect words.';
+                container.replaceChildren(emptyState);
                 return;
             }
 
             const acrossWords = creatorWords.filter(w => w.dir === 'across');
             const downWords = creatorWords.filter(w => w.dir === 'down');
 
-            let html = `
-                <div class="clues-section">
-                    <div class="clue-group">
-                        <h4 class="clues-column-header">
-                            <span><i class="fa-solid fa-arrows-left-right"></i> Across</span>
-                            <span class="clue-count-badge" id="across-count">${acrossWords.length}</span>
-                        </h4>
-                        <div id="clues-across-list" class="clue-list-h"></div>
-                    </div>
-                    <div class="clue-group">
-                        <h4 class="clues-column-header">
-                            <span><i class="fa-solid fa-arrows-up-down"></i> Down</span>
-                            <span class="clue-count-badge" id="down-count">${downWords.length}</span>
-                        </h4>
-                        <div id="clues-down-list" class="clue-list-h"></div>
-                    </div>
-                </div>
-            `;
-            container.innerHTML = html;
+            const cluesSection = createEl('div', { className: 'clues-section' });
 
-            const acrossList = document.getElementById('clues-across-list');
-            const downList = document.getElementById('clues-down-list');
+            const acrossGroup = createEl('div', { className: 'clue-group' });
+            const acrossHeader = createEl('h4', { className: 'clues-column-header' });
+            const acrossHeaderLeft = createEl('span');
+            acrossHeaderLeft.append(createEl('i', { className: 'fa-solid fa-arrows-left-right' }), document.createTextNode(' Across'));
+            const acrossCount = createEl('span', { className: 'clue-count-badge', text: String(acrossWords.length), attrs: { id: 'across-count' } });
+            acrossHeader.append(acrossHeaderLeft, acrossCount);
+            const acrossList = createEl('div', { className: 'clue-list-h', attrs: { id: 'clues-across-list' } });
+            acrossGroup.append(acrossHeader, acrossList);
+
+            const downGroup = createEl('div', { className: 'clue-group' });
+            const downHeader = createEl('h4', { className: 'clues-column-header' });
+            const downHeaderLeft = createEl('span');
+            downHeaderLeft.append(createEl('i', { className: 'fa-solid fa-arrows-up-down' }), document.createTextNode(' Down'));
+            const downCount = createEl('span', { className: 'clue-count-badge', text: String(downWords.length), attrs: { id: 'down-count' } });
+            downHeader.append(downHeaderLeft, downCount);
+            const downList = createEl('div', { className: 'clue-list-h', attrs: { id: 'clues-down-list' } });
+            downGroup.append(downHeader, downList);
+
+            cluesSection.append(acrossGroup, downGroup);
+            container.replaceChildren(cluesSection);
 
             creatorWords.forEach(word => {
                 const key = `${word.number}-${word.dir}`;
@@ -871,15 +958,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 const card = document.createElement('div');
                 card.className = 'clue-card-h';
                 
-                card.innerHTML = `
-                    <div class="clue-num-pill">${word.number}</div>
-                    <div class="clue-input-wrap">
-                        <input type="text" placeholder="Describe clue..." class="clue-entry-input" value="${existingClue}" />
-                    </div>
-                    <div class="clue-word-len">${word.answer.length}</div>
-                `;
-                
-                const clueInput = card.querySelector('.clue-entry-input');
+                const numPill = createEl('div', { className: 'clue-num-pill', text: String(word.number) });
+                const inputWrap = createEl('div', { className: 'clue-input-wrap' });
+                const clueInput = createEl('input', { className: 'clue-entry-input', attrs: { type: 'text', placeholder: 'Describe clue...' } });
+                clueInput.value = existingClue;
+                inputWrap.appendChild(clueInput);
+                const len = createEl('div', { className: 'clue-word-len', text: String(word.answer.length) });
+                card.append(numPill, inputWrap, len);
+
                 clueInput.addEventListener('input', (e) => {
                     creatorClues[key] = e.target.value;
                 });
@@ -895,9 +981,8 @@ document.addEventListener('DOMContentLoaded', () => {
         function initCreatorGrid() {
             const size = parseInt(document.getElementById('create-size').value);
             const board = document.getElementById('creator-board');
-            board.innerHTML = '';
-            board.style.gridTemplateColumns = `repeat(${size}, 48px)`;
-            board.style.gridTemplateRows = `repeat(${size}, 48px)`;
+            board.replaceChildren();
+            applyGridSizeClass(board, 'creator-grid-size', size);
         
             creatorGrid = Array.from({ length: size }, () => Array.from({ length: size }, () => ({ isBlack: false, char: '' })));
             
@@ -927,10 +1012,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (isBlack) {
                                 cellDiv.classList.add('black-cell');
                                 input.value = '';
-                                input.style.display = 'none';
+                                input.classList.add('cell-input-hidden');
                             } else {
                                 cellDiv.classList.remove('black-cell');
-                                input.style.display = 'block';
+                                input.classList.remove('cell-input-hidden');
                             }
                             refreshCreatorClues(size);
                         } else {
@@ -964,7 +1049,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             const input = cellDiv.querySelector('input');
                             if (input) {
                                 input.value = '';
-                                input.style.display = 'none';
+                                input.classList.add('cell-input-hidden');
                             }
                         }
                     }
@@ -1082,38 +1167,47 @@ document.addEventListener('DOMContentLoaded', () => {
                 { user: 'NewSolver', content: 'How do you approach a grid when you have no idea about any of the clues? Any strategies?', date: '1 day ago', likes: 5, tag: 'help', replies: 7 },
             ];
             const all = [...stored.slice().reverse(), ...defaults];
-            forumFeed.innerHTML = '';
+            forumFeed.replaceChildren();
 
             all.forEach((post, i) => {
-                const tagColors = { tips: '#856404', help: '#0284C7', showcase: '#166534', puzzles: '#5a4200' };
-                const tagBgs = { tips: '#fff9e6', help: '#F0F9FF', showcase: '#F0FDF4', puzzles: '#FFF7ED' };
-                const tagColor = tagColors[post.tag] || '#64748B';
-                const tagBg = tagBgs[post.tag] || '#F1F5F9';
                 const initial = (post.user || 'U')[0].toUpperCase();
-                const avatarColors = ['#2d5e45','#3e7a5c','#1b3a2d','#4ade80','#fbbf24'];
-                const avatarBg = avatarColors[i % avatarColors.length];
+                const avatarClasses = ['forum-avatar-c1', 'forum-avatar-c2', 'forum-avatar-c3', 'forum-avatar-c4', 'forum-avatar-c5'];
+                const avatarClass = avatarClasses[i % avatarClasses.length];
+                const tagClass = `post-tag-${post.tag || 'general'}`;
 
                 const card = document.createElement('div');
                 card.className = 'forum-post animate-slide-up';
-                card.style.animationDelay = `${i * 0.1}s`;
-                card.innerHTML = `
-                    <div class="post-top">
-                        <div class="forum-avatar" style="background: ${avatarBg};">${initial}</div>
-                        <div class="post-header">
-                            <div class="post-user-meta">
-                                <strong class="post-user">${post.user || 'Anonymous'}</strong>
-                                <span class="post-tag" style="color: ${tagColor}; background: ${tagBg};">${(post.tag || 'general').toUpperCase()}</span>
-                            </div>
-                        </div>
-                        <span class="post-time">${post.date || 'just now'}</span>
-                    </div>
-                    <p class="post-content">${post.content}</p>
-                    <div class="post-actions">
-                        <button class="post-action-btn"><i class="fa-regular fa-heart"></i> ${post.likes || 0}</button>
-                        <button class="post-action-btn"><i class="fa-regular fa-comment"></i> ${post.replies || 0}</button>
-                        <button class="post-action-btn"><i class="fa-regular fa-bookmark"></i></button>
-                    </div>
-                `;
+                const postTop = createEl('div', { className: 'post-top' });
+                const avatar = createEl('div', {
+                    className: `forum-avatar ${avatarClass}`,
+                    text: initial
+                });
+
+                const postHeader = createEl('div', { className: 'post-header' });
+                const userMeta = createEl('div', { className: 'post-user-meta' });
+                const userName = createEl('strong', { className: 'post-user', text: post.user || 'Anonymous' });
+                const postTag = createEl('span', {
+                    className: `post-tag ${tagClass}`,
+                    text: (post.tag || 'general').toUpperCase()
+                });
+                userMeta.append(userName, postTag);
+                postHeader.appendChild(userMeta);
+
+                const postTime = createEl('span', { className: 'post-time', text: post.date || 'just now' });
+                postTop.append(avatar, postHeader, postTime);
+
+                const content = createEl('p', { className: 'post-content', text: post.content });
+
+                const actions = createEl('div', { className: 'post-actions' });
+                const likeBtn = createEl('button', { className: 'post-action-btn' });
+                likeBtn.append(createEl('i', { className: 'fa-regular fa-heart' }), document.createTextNode(` ${post.likes || 0}`));
+                const replyBtn = createEl('button', { className: 'post-action-btn' });
+                replyBtn.append(createEl('i', { className: 'fa-regular fa-comment' }), document.createTextNode(` ${post.replies || 0}`));
+                const saveBtn = createEl('button', { className: 'post-action-btn' });
+                saveBtn.appendChild(createEl('i', { className: 'fa-regular fa-bookmark' }));
+                actions.append(likeBtn, replyBtn, saveBtn);
+
+                card.append(postTop, content, actions);
                 forumFeed.appendChild(card);
             });
         };
@@ -1212,7 +1306,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const buildTiles = () => {
-            tileLayer.innerHTML = '';
+            tileLayer.replaceChildren();
             tileObjs.length = 0;
             const frags = makeFragments();
             const zones = getZones();
@@ -1227,7 +1321,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const div = document.createElement('div');
                     div.className = `tile ${colorStyles[Math.floor(Math.random() * colorStyles.length)]}`;
                     div.textContent = letter;
-                    div.style.width = TS + 'px'; div.style.height = TS + 'px';
                     const dist = Math.sqrt(Math.pow((homeX + TS / 2) - cx, 2) + Math.pow((homeY + TS / 2) - cy, 2));
                     div.style.setProperty('--tile-opacity', Math.max(0.35, Math.min(0.85, (dist / Math.sqrt(cx*cx + cy*cy)) * 1.2)).toFixed(2));
                     let sx, sy;
@@ -1332,13 +1425,15 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const renderLB = () => {
-            lbList.innerHTML = '';
+            lbList.replaceChildren();
             updatePodium(currentData);
             
             // Show only from 4th place onwards in the list if podium exists
             const listData = currentData.slice(3, itemsToShow + 3);
             if (listData.length === 0) {
-                lbList.innerHTML = '<div style="text-align:center; padding: 20px; color: var(--color-text-mut);">No more rankings yet!</div>';
+                const noData = createEl('div', { className: 'lb-no-data' });
+                noData.textContent = 'No more rankings yet!';
+                lbList.replaceChildren(noData);
                 return;
             }
 
@@ -1347,8 +1442,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 const rank = i + 4;
                 const row = document.createElement('div');
                 row.className = 'lb-entry animate-slide-up';
-                row.style.animationDelay = `${i * 0.05}s`;
-                row.innerHTML = `<span class="lb-rank">${rank}</span><div class="lb-user-avatar" style="background:#2D5E45">${entry.name[0]}</div><div class="lb-user-info"><strong>${entry.name}</strong><span class="lb-diff">${diff}</span></div><span class="lb-user-score">${entry.score.toLocaleString()}</span>`;
+                const rankSpan = createEl('span', { className: 'lb-rank', text: String(rank) });
+                const avatar = createEl('div', {
+                    className: 'lb-user-avatar lb-avatar-forest',
+                    text: entry.name[0]
+                });
+                const userInfo = createEl('div', { className: 'lb-user-info' });
+                userInfo.append(
+                    createEl('strong', { text: entry.name }),
+                    createEl('span', { className: 'lb-diff', text: diff })
+                );
+                const score = createEl('span', { className: 'lb-user-score', text: entry.score.toLocaleString() });
+                row.append(rankSpan, avatar, userInfo, score);
                 lbList.appendChild(row);
             });
         };
@@ -1451,9 +1556,8 @@ function loadPuzzle(puzzleInfo) {
 function renderGrid(size) {
     size = parseInt(size, 10);
     const board = document.getElementById('crossword-board');
-    board.innerHTML = '';
-    board.style.gridTemplateColumns = `repeat(${size}, var(--cell-size, 52px))`;
-    board.style.gridTemplateRows = `repeat(${size}, var(--cell-size, 52px))`;
+    board.replaceChildren();
+    applyGridSizeClass(board, 'cw-grid-size', size);
 
     for (let r = 0; r < size; r++) {
         for (let c = 0; c < size; c++) {
@@ -1494,12 +1598,14 @@ function renderGrid(size) {
 function renderClues(words) {
     const acrossList = document.getElementById('clues-across');
     const downList = document.getElementById('clues-down');
-    acrossList.innerHTML = '';
-    downList.innerHTML = '';
+    acrossList.replaceChildren();
+    downList.replaceChildren();
 
     words.forEach(word => {
         const li = document.createElement('li');
-        li.innerHTML = `<strong>${word.number}.</strong> ${word.clue}`;
+        const num = document.createElement('strong');
+        num.textContent = `${word.number}.`;
+        li.append(num, document.createTextNode(` ${word.clue}`));
         li.dataset.wordId = word.answer;
         li.dataset.row = word.row;
         li.dataset.col = word.col;
@@ -1641,11 +1747,13 @@ function checkAnswers() {
                     filledCount++;
                     const cellDiv = input.closest('.cw-cell');
                     if (cell.userInput === cell.answerChar) {
-                        input.style.color = 'var(--success)';
+                        input.classList.remove('input-error');
+                        input.classList.add('input-success');
                         input.classList.remove('error-pulse');
                         if (cellDiv) { cellDiv.classList.remove('incorrect'); cellDiv.classList.add('correct'); }
                     } else {
-                        input.style.color = 'var(--error)';
+                        input.classList.remove('input-success');
+                        input.classList.add('input-error');
                         input.classList.add('error-pulse');
                         if (cellDiv) { cellDiv.classList.remove('correct'); cellDiv.classList.add('incorrect'); }
                         allCorrect = false;

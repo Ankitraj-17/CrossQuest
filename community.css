@@ -321,6 +321,37 @@
   color: #92400E;
 }
 
+.forum-avatar-c1 { background: #2d5e45; }
+.forum-avatar-c2 { background: #3e7a5c; }
+.forum-avatar-c3 { background: #1b3a2d; }
+.forum-avatar-c4 { background: #4ade80; }
+.forum-avatar-c5 { background: #fbbf24; }
+
+.post-tag.post-tag-tips {
+  color: #856404;
+  background: #fff9e6;
+}
+
+.post-tag.post-tag-help {
+  color: #0284c7;
+  background: #f0f9ff;
+}
+
+.post-tag.post-tag-showcase {
+  color: #166534;
+  background: #f0fdf4;
+}
+
+.post-tag.post-tag-puzzles {
+  color: #5a4200;
+  background: #fff7ed;
+}
+
+.post-tag.post-tag-general {
+  color: #64748b;
+  background: #f1f5f9;
+}
+
 .post-content {
   font-size: 1rem;
   line-height: 1.6;
