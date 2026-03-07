@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <strong>A complete crossword web experience built with HTML, CSS, and Vanilla JavaScript.</strong>
+  <strong>A complete crossword web experience built with HTML, CSS, and JavaScript.</strong>
 </p>
 
 <p align="center">
@@ -77,7 +77,7 @@ CrossQuest is a multi-page front-end case study that simulates a real puzzle pro
 
 - HTML5
 - CSS3 (custom tokens + responsive media queries)
-- Vanilla JavaScript (DOM logic + localStorage)
+- JavaScript (DOM logic + localStorage)
 - Font Awesome icons
 - Google Fonts (`Nunito`)
 
