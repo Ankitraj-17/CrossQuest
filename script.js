@@ -5,6 +5,7 @@
     - Updates progress, XP, streaks, and localStorage-backed state.
 */
 // --- Mobile Navigation Toggle ---
+// Handles collapsing/expanding sidebar behavior on smaller screens.
 document.addEventListener('DOMContentLoaded', () => {
     // Mobile Toggle
     const mobileToggle = document.querySelector('.mobile-toggle');
@@ -19,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // --- Confetti Burst ---
+// Lightweight canvas animation used after puzzle completion.
 function launchConfetti() {
     const canvas = document.getElementById('confetti-canvas');
     if (!canvas) return;
@@ -72,6 +74,7 @@ function launchConfetti() {
 }
 
 function createEl(tag, options = {}) {
+    // Small helper to keep dynamic DOM creation readable and consistent.
     const node = document.createElement(tag);
     if (options.className) node.className = options.className;
     if (options.text !== undefined) node.textContent = options.text;
@@ -84,6 +87,7 @@ function createEl(tag, options = {}) {
 }
 
 function applyGridSizeClass(element, prefix, size) {
+    // Ensures only one size-class is active at a time (e.g., cw-grid-size-10).
     const classPrefix = `${prefix}-`;
     Array.from(element.classList).forEach((cls) => {
         if (cls.startsWith(classPrefix)) element.classList.remove(cls);
@@ -92,6 +96,7 @@ function applyGridSizeClass(element, prefix, size) {
 }
 
 // --- Data Structures ---
+// Built-in puzzle payloads used by Play/Game pages.
 
 const defaultPuzzleData = {
     id: 'daily-1',
@@ -144,6 +149,7 @@ window.playBuiltIn = function(topicId) {
 };
 
 // --- State ---
+// Runtime state shared by game functions in this file.
 let currentPuzzle = null;
 let gridModel = []; // 2D array representation
 let timerInterval = null;
@@ -152,6 +158,7 @@ let isTimerRunning = false;
 let currentScore = 0;
 
 // --- Initialization ---
+// Global UI helpers and modal systems.
 window.deleteCustomPuzzle = function(id) {
     let puzzles = JSON.parse(localStorage.getItem('cw_custom_puzzles') || '[]');
     puzzles = puzzles.filter(p => p.id !== id);
@@ -202,6 +209,7 @@ window.customConfirm = function(title, message, onConfirm) {
     const btnCancel = document.getElementById('cc-btn-cancel');
     const btnConfirm = document.getElementById('cc-btn-confirm');
     
+    // Clone-and-replace clears old listeners so callbacks do not stack across openings.
     const newCancel = btnCancel.cloneNode(true);
     const newConfirm = btnConfirm.cloneNode(true);
     btnCancel.parentNode.replaceChild(newCancel, btnCancel);
@@ -291,6 +299,7 @@ window.showPremiumModal = function() {
 
         const cards = createEl('div', { className: 'prem-cards premium-cards' });
 
+        // Reusable row builder for plan feature lists.
         const createFeature = (text, iconClass = 'fa-solid fa-check', extraClass = '') => {
             const li = createEl('li', { className: extraClass });
             li.append(createEl('i', { className: iconClass }), document.createTextNode(` ${text}`));
@@ -515,6 +524,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     // --- Local Profile System ---
+    // Stores and reuses a local-only profile name/avatar style.
     let localProfile = localStorage.getItem('cw_local_profile_name');
     if (!localProfile) {
         localProfile = 'Guest Scholar';
@@ -636,6 +646,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Home Page ---
+    // Entry actions and premium gates on dashboard cards.
     const btnStartDaily = document.getElementById('btn-start-daily');
     if (btnStartDaily) {
         btnStartDaily.addEventListener('click', (e) => {
@@ -653,6 +664,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Library Page Launch Logic ---
+    // Click handlers for built-in and custom puzzle cards.
     document.querySelectorAll('.challenge-card:not(.card-pro)').forEach(card => {
         card.classList.add('is-clickable');
         card.addEventListener('click', () => {
@@ -741,6 +753,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Game Page ---
+    // Loads selected puzzle and wires reset/check/reveal controls.
     const btnCheck = document.getElementById('btn-check');
     if (btnCheck) {
         btnCheck.addEventListener('click', checkAnswers);
@@ -804,6 +817,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     
     // --- Create Page ---
+    // Grid editor, word detection, clue authoring, and local save flow.
     const btnGenerateGrid = document.getElementById('btn-generate-grid');
     if (btnGenerateGrid) {
         let creatorGrid = [];
@@ -1089,6 +1103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Home Page ---
+    // Daily progress widgets (XP, streak, level ring) from localStorage.
     const bStartDaily = document.getElementById('btn-start-daily');
     if (bStartDaily) {
         bStartDaily.addEventListener('click', () => {
@@ -1157,6 +1172,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Forum Page ---
+    // Renders forum feed and persists newly published posts locally.
     const forumFeed = document.getElementById('forum-feed');
     if (forumFeed) {
         const loadPosts = () => {
@@ -1245,6 +1261,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Landing Page ---
+    // Animated entry scene with draggable tiles and sparkle particles.
     const tileLayer = document.getElementById('tileLayer');
     if (tileLayer) {
         let navigating = false;
@@ -1295,6 +1312,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
 
         const getZones = () => {
+            // Predefined map zones where tile-word fragments settle.
             const vw = window.innerWidth, vh = window.innerHeight;
             return [
                 { x: vw * 0.02, y: vh * 0.04 }, { x: vw * 0.70, y: vh * 0.02 },
@@ -1306,6 +1324,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const buildTiles = () => {
+            // Builds tile DOM nodes, assigns home targets, and random spawn edges.
             tileLayer.replaceChildren();
             tileObjs.length = 0;
             const frags = makeFragments();
@@ -1337,6 +1356,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const physicsTick = () => {
+            // Spring-like motion toward home positions + mouse repulsion.
             tileObjs.forEach(t => {
                 if (t === dragging) return;
                 if (!t.settled) { t.div.style.transform = `translate(${t.x}px,${t.y}px) rotate(${t.rot}deg)`; return; }
@@ -1402,6 +1422,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Leaderboard Page ---
+    // Podium + ranked list rendering from locally saved scores.
     const lbList = document.getElementById('lb-list-container');
     if (lbList) {
         let itemsToShow = 10;
@@ -1472,6 +1493,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // --- Crossword Logic ---
+// Core puzzle load/render pipeline for board + clues.
 
 function loadPuzzle(puzzleInfo) {
     currentPuzzle = puzzleInfo;
@@ -1516,7 +1538,8 @@ function loadPuzzle(puzzleInfo) {
         else if (puzzleInfo.difficulty === 'Medium') diffDisp.classList.add('tag-med');
     }
     
-    // Reset State
+    // Build a blank grid model first, then map each word into it.
+    // `answerChar === null` means blocked/black cell.
     gridModel = [];
     for (let r = 0; r < puzzleInfo.size; r++) {
         let row = [];
@@ -1628,6 +1651,7 @@ function renderClues(words) {
 }
 
 // --- Interaction Logic ---
+// Cell input, keyboard navigation, and cursor movement rules.
 
 let currentDirection = 'across'; // Which way does typing advance?
 
@@ -1641,7 +1665,7 @@ function handleCellInput(e) {
     const r = parseInt(input.dataset.row);
     const c = parseInt(input.dataset.col);
     
-    // Save to model
+    // Source of truth is the model; UI input mirrors it.
     gridModel[r][c].userInput = input.value.toUpperCase();
     input.value = input.value.toUpperCase();
 
@@ -1729,6 +1753,7 @@ function advanceCursor(r, c, step, forceDirection = null) {
 }
 
 // --- Validation ---
+// Answer checking, score calculation, and win-state side effects.
 
 function checkAnswers() {
     let allCorrect = true;
@@ -1765,7 +1790,7 @@ function checkAnswers() {
         }
     }
 
-    // Calculate dynamic score
+    // Score rewards completion speed and coverage (faster + more filled = higher score).
     if (totalChars > 0) {
         currentScore = Math.floor((filledCount / totalChars) * 1000) - (secondsElapsed * 2);
     }
@@ -1807,7 +1832,7 @@ function handleWin(filledCount = 0, totalChars = 0) {
 
     // Save to Leaderboard using LocalName
     let localProfile = localStorage.getItem('cw_local_profile_name') || "Guest Scholar";
-    // Save score to local storage leaderboard
+    // Persist attempt so Leaderboard page can render without a backend.
     saveScoreToLeaderboard(localProfile, currentPuzzle.difficulty || 'Custom', secondsElapsed, currentScore);
 
     // Award XP (Duolingo-style)
@@ -1841,6 +1866,7 @@ function handleWin(filledCount = 0, totalChars = 0) {
 }
 
 // --- Timer ---
+// Simple elapsed-time stopwatch tied to first user input.
 
 function startTimer() {
     if (isTimerRunning) return;
@@ -1878,10 +1904,12 @@ function formatTime(totalSeconds) {
 }
 
 // --- Leaderboard Logic (LocalStorage) ---
+// Persistence helpers for reading/writing leaderboard entries.
 
 function getLeaderboardData() {
     const raw = localStorage.getItem('cw_leaderboard');
     if (raw) return JSON.parse(raw);
+    // Seed data shown for first-time users when no local scores exist yet.
     return [
         { name: "WordMaster99", diff: "Hard", time: 135, score: 9800 },
         { name: "LexiconLover", diff: "Hard", time: 165, score: 9550 },
