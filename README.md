@@ -5,13 +5,13 @@
 </p>
 
 <p align="center">
-  <strong>A complete crossword web experience built with HTML, CSS, and JavaScript.</strong>
+  <strong>A complete crossword web experience built with HTML, CSS, and Vanilla JavaScript.</strong>
 </p>
 
 <p align="center">
   <img alt="Tech: HTML" src="https://img.shields.io/badge/HTML5-Frontend-E34F26?logo=html5&logoColor=white" />
   <img alt="Tech: CSS" src="https://img.shields.io/badge/CSS3-Responsive-1572B6?logo=css3&logoColor=white" />
-  <img alt="Tech: JavaScript" src="https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=111" />
+  <img alt="Tech: JavaScript" src="https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?logo=javascript&logoColor=111" />
   <img alt="Status" src="https://img.shields.io/badge/Status-Ready_for_Demo-2D5E45" />
 </p>
 
@@ -20,7 +20,6 @@
 </p>
 
 ---
-## Deploy Link: https://ankitraj-17.github.io/CrossQuest/
 
 ## Quick Navigation
 
@@ -77,7 +76,7 @@ CrossQuest is a multi-page front-end case study that simulates a real puzzle pro
 
 - HTML5
 - CSS3 (custom tokens + responsive media queries)
-- JavaScript (DOM logic + localStorage)
+- Vanilla JavaScript (DOM logic + localStorage)
 - Font Awesome icons
 - Google Fonts (`Nunito`)
 

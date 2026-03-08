@@ -14,7 +14,27 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mobileToggle && sidebar) {
         mobileToggle.addEventListener('click', (e) => {
             e.preventDefault();
+            e.stopPropagation();
             sidebar.classList.toggle('mobile-expanded');
+        });
+
+        // Close when clicking main content (backdrop effect)
+        const mainArea = document.querySelector('.main-area');
+        if (mainArea) {
+            mainArea.addEventListener('click', () => {
+                if (sidebar.classList.contains('mobile-expanded')) {
+                    sidebar.classList.remove('mobile-expanded');
+                }
+            });
+        }
+
+        // Close button inside sidebar
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'sidebar-close';
+        closeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+        sidebar.appendChild(closeBtn);
+        closeBtn.addEventListener('click', () => {
+            sidebar.classList.remove('mobile-expanded');
         });
     }
 });
@@ -1580,6 +1600,7 @@ function renderGrid(size) {
     size = parseInt(size, 10);
     const board = document.getElementById('crossword-board');
     board.replaceChildren();
+    board.style.setProperty('--cw-grid-size', String(size));
     applyGridSizeClass(board, 'cw-grid-size', size);
 
     for (let r = 0; r < size; r++) {

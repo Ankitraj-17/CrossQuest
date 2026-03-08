@@ -4,7 +4,6 @@
 .build-card {
   display: flex;
   flex-direction: column;
-  align-items: center;
   padding: 24px;
   overflow-x: auto;
   max-width: 100%;
@@ -12,18 +11,19 @@
 }
 
 .crossword-board.editor-mode {
-  --cell-size: clamp(20px, 6.2vw, 48px);
+  --cell-size: clamp(24px, 7.5vw, 48px); /* Increased minimum */
   display: grid;
   justify-content: center;
   align-content: center;
   gap: 4px;
   background: #FFFFFF;
-  padding: 32px;
-  border-radius: 32px;
+  padding: 24px; /* Reduced from 32px */
+  border-radius: 24px; /* Reduced from 32px */
   border: 4px solid #D6CCBA;
-  border-bottom: 12px solid #C8BDA8; /* Chunky Frame */
+  border-bottom: 10px solid #C8BDA8; /* Chunky Frame */
   width: fit-content;
   max-width: 100%;
+  margin: 0 auto;
 }
 .editor-mode .cw-cell {
   width: var(--cell-size);
@@ -46,7 +46,7 @@
   border: none;
   background: transparent;
   text-align: center;
-  font-size: 1.4rem;
+  font-size: clamp(0.9rem, 4.5vw, 1.4rem);
   font-weight: 800;
   font-family: var(--font-main);
   text-transform: uppercase;
@@ -283,6 +283,8 @@
   grid-area: grid;
   display: flex;
   justify-content: center;
+  min-width: 0;
+  order: -1; /* Force grid above settings on mobile in grid-areas */
 }
 .create-grid-col .build-card {
   width: 100%;
@@ -301,6 +303,7 @@
   gap: 16px;
   position: sticky;
   top: 20px;
+  min-width: 0;
 }
 
 /* Panel Cards */
@@ -311,6 +314,7 @@
   border-radius: 32px;
   padding: 24px;
   box-shadow: 0 4px 12px rgba(27, 58, 45, 0.05);
+  min-width: 0;
 }
 .create-panel-header {
   display: flex;
@@ -431,8 +435,9 @@
   .create-editor-layout {
     grid-template-columns: 1fr;
     grid-template-areas:
-      "sidebar"
-      "grid";
+      "grid"
+      "sidebar";
+    gap: 12px;
   }
 
   .create-sidebar-col {
@@ -470,41 +475,41 @@
 
   /* Simple, stable mobile controls */
   .size-pills {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
   }
 
   .size-pill {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     width: 100%;
     min-height: 48px;
-    padding: 12px 14px;
-    text-align: left;
+    padding: 10px 4px;
+    text-align: center;
     line-height: 1.2;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #1B3A2D;
   }
 
   .create-tools-bar {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
   }
 
   .create-tools-bar .tool-btn {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     width: 100%;
     min-height: 48px;
-    padding: 12px 14px;
+    padding: 10px 4px;
     border-bottom-width: 5px;
-    text-align: left;
-    gap: 10px;
+    text-align: center;
+    gap: 4px;
   }
 
   .create-tools-bar .tool-btn i,
@@ -516,7 +521,7 @@
   }
 
   .create-tools-bar .tool-btn span {
-    font-size: 0.8rem;
+    font-size: 0.65rem;
     letter-spacing: 0.3px;
   }
 }
@@ -547,17 +552,17 @@
   }
 
   .crossword-board.editor-mode {
-    --cell-size: clamp(16px, 5.0vw, 22px);
-    padding: 10px;
-    border-radius: 22px;
+    --cell-size: clamp(20px, 7.5vw, 26px);
+    padding: 8px;
+    border-radius: 12px;
     border-width: 2px;
-    border-bottom-width: 8px;
+    border-bottom-width: 6px;
     gap: 2px;
   }
 
   .editor-mode .cw-cell {
-    border-width: 1.5px;
-    border-bottom-width: 3px;
+    border-width: 1px;
+    border-bottom-width: 2.5px;
     border-radius: 4px;
   }
 
@@ -568,14 +573,14 @@
   }
 
   .editor-mode .cw-cell input {
-    font-size: 0.9rem;
+    font-size: clamp(0.75rem, 3.8vw, 0.95rem);
   }
 }
 
 @media (max-width: 420px) {
   .crossword-board.editor-mode {
-    gap: 1px;
-    padding: 8px;
+    gap: 1.5px;
+    padding: 6px;
   }
 
   .editor-mode .cw-cell {

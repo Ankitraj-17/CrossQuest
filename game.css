@@ -56,19 +56,27 @@
 .play-grid-area {
   display: flex;
   flex-direction: column;
+  max-width: 100%;
+  overflow-x: auto;
   align-items: center;
 }
 
 .crossword-board {
+  --cw-grid-size: 8;
+  --cw-gap: 5px;
+  --cw-pad: 24px;
   display: grid;
   justify-content: center;
   align-content: center;
-  gap: 4px;
+  gap: var(--cw-gap);
   background: #FFFFFF;
-  padding: 24px;
-  border-radius: 16px;
-  border: 2px solid var(--color-border-subtle);
-  border-bottom: 5px solid var(--color-border-dark);
+  padding: var(--cw-pad); /* Reduced from 32px */
+  border-radius: 24px; /* Reduced from 36px */
+  border: 4px solid #D6CCBA;
+  border-bottom: 12px solid #C8BDA8; /* Chunky Frame */
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 /* =============================
@@ -276,7 +284,7 @@ body[data-game-theme="f1"] .clue-tab.active {
   border: none;
   background: transparent;
   text-align: center;
-  font-size: 1.4rem;
+  font-size: clamp(0.9rem, 4.5vw, 1.4rem);
   font-weight: 800;
   font-family: var(--font-main);
   text-transform: uppercase;
@@ -459,15 +467,21 @@ body[data-game-theme="f1"] .clue-tab.active {
 
   .play-layout {
     flex-direction: column !important;
-    align-items: stretch !important;
+    align-items: center !important; /* Center cards instead of stretching to avoid left-bias */
+    gap: 14px !important;
   }
 
   .play-grid-area {
     width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    align-items: center;
+    padding-bottom: 8px;
   }
 
   .play-sidebar-area {
     width: 100%;
+    max-width: 560px; /* Prevent over-stretching on tablets */
   }
 
   .play-clues-card {
@@ -475,19 +489,70 @@ body[data-game-theme="f1"] .clue-tab.active {
   }
 }
 
-@media (max-width: 520px) {
-  .crossword-board {
-    padding: 12px;
-    gap: 2px;
+@media (max-width: 540px) {
+  .play-header {
+    margin-bottom: 14px;
   }
 
-  .cw-cell {
+  .play-sidebar-area {
+    max-width: 100%;
+  }
+
+  .play-timer-card,
+  .play-clues-card {
+    padding: 14px;
+  }
+
+  .crossword-board {
+    --cw-pad: 10px;
+    --cw-gap: 3px;
+    --cell-size: min(
+      24px,
+      max(
+        18px,
+        calc(
+          (
+            100vw - 28px - (var(--cw-pad) * 2) - ((var(--cw-grid-size) - 1) * var(--cw-gap))
+          ) / var(--cw-grid-size)
+        )
+      )
+    );
     border-width: 2px;
-    border-bottom-width: 3px;
+    border-bottom-width: 6px;
+    border-radius: 12px;
+  }
+}
+@media (max-width: 380px) {
+  .crossword-board {
+    --cw-pad: 6px;
+    --cw-gap: 2px;
+    --cell-size: min(
+      22px,
+      max(
+        16px,
+        calc(
+          (
+            100vw - 24px - (var(--cw-pad) * 2) - ((var(--cw-grid-size) - 1) * var(--cw-gap))
+          ) / var(--cw-grid-size)
+        )
+      )
+    );
+    border-radius: 8px;
+    border-width: 1.5px;
+    border-bottom-width: 4px;
+  }
+}
+
+@media (max-width: 520px) {
+
+  .cw-cell {
+    border-width: 1px;
+    border-bottom-width: 2px;
+    border-radius: 4px;
   }
 
   .cw-cell input {
-    font-size: 1.05rem;
+    font-size: clamp(0.8rem, 4vw, 1.05rem);
   }
 
   .timer-display {
