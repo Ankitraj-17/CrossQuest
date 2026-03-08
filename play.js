@@ -10,6 +10,17 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	});
 
+	document.querySelectorAll('.challenge-card.card-pro').forEach((card) => {
+		card.classList.add('is-clickable');
+		card.addEventListener('click', (e) => {
+			e.preventDefault();
+			e.stopPropagation();
+			if (window.showPremiumModal) {
+				window.showPremiumModal();
+			}
+		});
+	});
+
 	const customList = document.getElementById('custom-puzzle-list');
 	if (!customList) return;
 
