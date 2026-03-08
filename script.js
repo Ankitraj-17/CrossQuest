@@ -534,6 +534,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const upgradeBtn = document.getElementById('btn-upgrade-pro');
     if (upgradeBtn) upgradeBtn.addEventListener('click', () => window.showPremiumModal());
 
+    // Global premium-gate fallback so locked cards/buttons consistently open the modal.
+    document.addEventListener('click', (e) => {
+        const premiumTarget = e.target.closest(
+            '.challenge-card.card-pro, .btn-locked, .bento-mini.bento-scramble, .bento-mini.bento-match, .bento-puzzle-item.locked, .card-pro'
+        );
+        if (!premiumTarget) return;
+        e.preventDefault();
+        e.stopPropagation();
+        if (window.showPremiumModal) window.showPremiumModal();
+    });
+
     // Intercept any clicks to premium links
     document.addEventListener('click', (e) => {
         const link = e.target.closest('a[href="premium.html"]');
