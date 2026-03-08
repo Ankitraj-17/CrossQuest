@@ -5,13 +5,13 @@
 </p>
 
 <p align="center">
-  <strong>A complete crossword web experience built with HTML, CSS, and Vanilla JavaScript.</strong>
+  <strong>A complete crossword web experience built with HTML, CSS, and JavaScript.</strong>
 </p>
 
 <p align="center">
   <img alt="Tech: HTML" src="https://img.shields.io/badge/HTML5-Frontend-E34F26?logo=html5&logoColor=white" />
   <img alt="Tech: CSS" src="https://img.shields.io/badge/CSS3-Responsive-1572B6?logo=css3&logoColor=white" />
-  <img alt="Tech: JavaScript" src="https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?logo=javascript&logoColor=111" />
+  <img alt="Tech: JavaScript" src="https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=111" />
   <img alt="Status" src="https://img.shields.io/badge/Status-Ready_for_Demo-2D5E45" />
 </p>
 
@@ -20,7 +20,7 @@
 </p>
 
 ---
-
+## Deploy Link: https://ankitraj-17.github.io/CrossQuest/
 ## Quick Navigation
 
 - [Live Overview](#crossquest)
@@ -31,28 +31,6 @@
 - [User Flow](#user-flow)
 - [Quick Start](#quick-start)
 - [Demo Checklist (for Teacher/Viva)](#demo-checklist-for-teacherviva)
-
-## Screenshots
-
-> Add your real screenshots to a `docs/screenshots/` folder and keep these names for instant display.
-
-| Landing | Dashboard |
-|---|---|
-| ![Landing](docs/screenshots/landing.png) | ![Dashboard](docs/screenshots/dashboard.png) |
-
-| Play Library | Gameplay |
-|---|---|
-| ![Play](docs/screenshots/play.png) | ![Game](docs/screenshots/game.png) |
-
-| Creator | Forum + Leaderboard |
-|---|---|
-| ![Create](docs/screenshots/create.png) | ![Community](docs/screenshots/community.png) |
-
-## Demo Video / GIF
-
-> Export a short walkthrough (20-40s) and save it as `docs/demo.gif`.
-
-![CrossQuest Demo](docs/demo.gif)
 
 CrossQuest is a multi-page front-end case study that simulates a real puzzle product flow:
 
@@ -135,31 +113,6 @@ flowchart LR
 - Local persistence with `localStorage`
 - Creator workflow from empty grid to clue list
 
-## Quick Start
-
-### 1. Clone and open folder
-
-```bash
-git clone <your-repo-url>
-cd "Html css js case study 2"
-```
-
-### 1.1 Optional: open in VS Code
-
-```bash
-code .
-```
-
-### 2. Run a local server (recommended)
-
-```bash
-python3 -m http.server 5502
-```
-
-### 3. Open in browser
-
-```text
-http://127.0.0.1:5502
 ```
 
 ### Alternative
